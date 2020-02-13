@@ -9,8 +9,6 @@ import cloud from "./cloud"
 export default class WordCloud extends Component {
   static propTypes = {
     data: PropTypes.array.isRequired,
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
 
     spiral: PropTypes.oneOf(['archimedean', 'rectangular']),
     rotate: PropTypes.number,
@@ -35,11 +33,43 @@ export default class WordCloud extends Component {
     onMouseLeaveHandler: (e, word, i) => {},
   }
 
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      width: 500,
+      height: 500
+    }
+
+    this.containerRef = React.createRef()
+  }
+
+  componentDidMount() {
+    this.resize()
+    window.addEventListener('resize', this.resize)
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.resize)
+  }
+
+
+  resize = () => {
+    if(this.containerRef.current) {
+      this.setState({
+        width: this.containerRef.current.clientWidth,
+        height: this.containerRef.current.clientHeight,
+      })
+    }
+  }
+
   render() {
     const {
-      data,
       width,
-      height,
+      height
+    } = this.state
+
+    const {
+      data,
 
       spiral,
       rotate,
@@ -55,9 +85,9 @@ export default class WordCloud extends Component {
 
     const fill = colorFunction || d3.scaleOrdinal().domain(data.map(d => d.value)).range(d3.schemeCategory10);
 
-    const fontScale = d3.scaleLinear().domain([0, d3.max(data, d => d.value)]).range([10,100]);
+    const fontScale = d3.scaleLinear().domain([0, d3.max(data, d => d.value)]).range([10,200]);
 
-    let processedWords = cloud()
+    const processedWords = cloud()
     .dimensions([width, height])
     .words(data)
     .fontSize(function(d) { return fontScale(+d.value); })
@@ -71,29 +101,31 @@ export default class WordCloud extends Component {
 
 
     return (
-      <svg width={width} height={height} style={{border: "1px solid black"}}>
-        <g transform={"translate("+(width/2)+","+(height/2)+")"}>
-          {processedWords.map((word,i) =>
-            <text
-              key={i}
+      <div ref={this.containerRef}>
+        <svg width={width} height={height} style={{border: "1px solid black"}}>
+          <g transform={"translate("+(width/2)+","+(height/2)+")"}>
+            {processedWords.map((word,i) =>
+              <text
+                key={i}
 
-              fontFamily={fontFamily}
-              fontStyle={fontStyle}
-              fontWeight={fontWeight}
-              fontSize={fontScale(word.value)}
-              textAnchor="middle"
-              transform={"translate(" + [word.x, word.y] + ")rotate(" + word.rotate + ")"}
-              fill={fill(i, word)}
+                fontFamily={fontFamily}
+                fontStyle={fontStyle}
+                fontWeight={fontWeight}
+                fontSize={fontScale(word.value)}
+                textAnchor="middle"
+                transform={"translate(" + [word.x, word.y] + ")rotate(" + word.rotate + ")"}
+                fill={fill(i, word)}
 
-              onClick={e => onClickHandler(e, word, i)}
-              onMouseOver={e => onMouseOverHandler(e, word, i)}
-              onMouseLeave={e => onMouseLeaveHandler(e, word, i)}
-              >
-              {word.key}
-            </text>
-          )}
-        </g>
-      </svg>
+                onClick={e => onClickHandler(e, word, i)}
+                onMouseOver={e => onMouseOverHandler(e, word, i)}
+                onMouseLeave={e => onMouseLeaveHandler(e, word, i)}
+                >
+                {word.key}
+              </text>
+            )}
+          </g>
+        </svg>
+      </div>
     )
   }
 }
