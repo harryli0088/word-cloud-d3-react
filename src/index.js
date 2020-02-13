@@ -17,6 +17,9 @@ export default class WordCloud extends Component {
     fontFamily: PropTypes.string,
     fontStyle: PropTypes.string,
     fontWeight: PropTypes.string,
+    onClickHandler: PropTypes.func,
+    onMouseOverHandler: PropTypes.func,
+    onMouseLeaveHandler: PropTypes.func,
 
     colorFunction: PropTypes.func
   }
@@ -27,6 +30,9 @@ export default class WordCloud extends Component {
     fontFamily: "Arial",
     fontStyle: "italics",
     fontWeight: "normal",
+    onClickHandler: (e, word, i) => {},
+    onMouseOverHandler: (e, word, i) => {},
+    onMouseLeaveHandler: (e, word, i) => {},
   }
 
   render() {
@@ -40,6 +46,9 @@ export default class WordCloud extends Component {
       fontFamily,
       fontStyle,
       fontWeight,
+      onClickHandler,
+      onMouseOverHandler,
+      onMouseLeaveHandler,
 
       colorFunction,
     } = this.props
@@ -66,13 +75,19 @@ export default class WordCloud extends Component {
         <g transform={"translate("+(width/2)+","+(height/2)+")"}>
           {processedWords.map((word,i) =>
             <text
+              key={i}
+
               fontFamily={fontFamily}
               fontStyle={fontStyle}
               fontWeight={fontWeight}
               fontSize={fontScale(word.value)}
               textAnchor="middle"
               transform={"translate(" + [word.x, word.y] + ")rotate(" + word.rotate + ")"}
-              fill={fill(i)}
+              fill={fill(i, word)}
+
+              onClick={e => onClickHandler(e, word, i)}
+              onMouseOver={e => onMouseOverHandler(e, word, i)}
+              onMouseLeave={e => onMouseLeaveHandler(e, word, i)}
               >
               {word.key}
             </text>
