@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
 import * as d3 from 'd3'
@@ -6,7 +6,7 @@ import * as d3 from 'd3'
 import styles from './styles.css'
 import cloud from "./cloud"
 
-export default class WordCloud extends Component {
+export default class WordCloud extends React.Component {
   static propTypes = {
     data: PropTypes.array.isRequired,
 
@@ -89,13 +89,13 @@ export default class WordCloud extends Component {
 
     const processedWords = cloud()
     .dimensions([width, height])
-    .words(data)
+    .words(JSON.parse(JSON.stringify(data)))
     .fontSize(function(d) { return fontScale(+d.value); })
     .text(function(d) { return d.key; })
-    .rotate(function() { return rotate; })
+    .rotate(rotate)
     .font(fontFamily)
     .spiral(spiral)
-    .compute(40);
+    .compute();
 
     console.log("processedWords", processedWords)
 
@@ -113,7 +113,7 @@ export default class WordCloud extends Component {
                 fontWeight={fontWeight}
                 fontSize={fontScale(word.value)}
                 textAnchor="middle"
-                transform={"translate(" + [word.x, word.y] + ")rotate(" + word.rotate + ")"}
+                transform={"translate(" + [word.x, word.y] + ") rotate(" + word.rotate + ")"}
                 fill={fill(i, word)}
 
                 onClick={e => onClickHandler(e, word, i)}

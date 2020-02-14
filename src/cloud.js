@@ -3,7 +3,7 @@ import * as d3 from 'd3'
 // Word cloud layout by Jason Davies, http://www.jasondavies.com/word-cloud/
 // Algorithm due to Jonathan Feinberg, http://static.mrfeinberg.com/bv_ch03.pdf
 export default function cloud() {
-  var dimensions = [256, 256],
+  let dimensions = [256, 256],
   text = cloudText,
   font = cloudFont,
   fontSize = cloudFontSize,
@@ -16,7 +16,8 @@ export default function cloud() {
   cloud = {};
 
   cloud.compute = function() {
-    var board = zeroArray((dimensions[0] >> 5) * dimensions[1]),
+    ctx.clearRect(0,0,canvas.width,canvas.height)
+    let board = zeroArray((dimensions[0] >> 5) * dimensions[1]),
     bounds = null,
     tags = [],
     data = words.map(function(d, i) {
@@ -54,7 +55,7 @@ export default function cloud() {
 
 
   function place(board, tag, bounds) {
-    var perimeter = [{x: 0, y: 0}, {x: dimensions[0], y: dimensions[1]}],
+    let perimeter = [{x: 0, y: 0}, {x: dimensions[0], y: dimensions[1]}],
     startX = tag.x,
     startY = tag.y,
     maxDelta = Math.sqrt(dimensions[0] * dimensions[0] + dimensions[1] * dimensions[1]),
@@ -74,97 +75,98 @@ export default function cloud() {
       tag.x = startX + dx;
       tag.y = startY + dy;
 
-      if (tag.x + tag.x0 < 0 || tag.y + tag.y0 < 0 ||
-        tag.x + tag.x1 > dimensions[0] || tag.y + tag.y1 > dimensions[1]) continue;
-        // TODO only check for collisions within current bounds.
-        if (!bounds || !cloudCollide(tag, board, dimensions[0])) {
-          if (!bounds || collideRects(tag, bounds)) {
-            var sprite = tag.sprite,
-            w = tag.width >> 5,
-            sw = dimensions[0] >> 5,
-            lx = tag.x - (w << 4),
-            sx = lx & 0x7f,
-            msx = 32 - sx,
-            h = tag.y1 - tag.y0,
-            x = (tag.y + tag.y0) * sw + (lx >> 5),
-            last;
-            for (var j = 0; j < h; j++) {
-              last = 0;
-              for (var i = 0; i <= w; i++) {
-                board[x + i] |= (last << msx) | (i < w ? (last = sprite[j * w + i]) >>> sx : 0);
-              }
-              x += sw;
+      if (
+        tag.x + tag.x0 < 0 || tag.y + tag.y0 < 0 ||
+        tag.x + tag.x1 > dimensions[0] || tag.y + tag.y1 > dimensions[1]
+      ) continue;
+      // TODO only check for collisions within current bounds.
+      if (!bounds || !cloudCollide(tag, board, dimensions[0])) {
+        if (!bounds || collideRects(tag, bounds)) {
+          let sprite = tag.sprite,
+          w = tag.width >> 5,
+          sw = dimensions[0] >> 5,
+          lx = tag.x - (w << 4),
+          sx = lx & 0x7f,
+          msx = 32 - sx,
+          h = tag.y1 - tag.y0,
+          x = (tag.y + tag.y0) * sw + (lx >> 5),
+          last;
+          for (let j = 0; j < h; j++) {
+            last = 0;
+            for (let i = 0; i <= w; i++) {
+              board[x + i] |= (last << msx) | (i < w ? (last = sprite[j * w + i]) >>> sx : 0);
             }
-            delete tag.sprite;
-            return true;
+            x += sw;
           }
+          delete tag.sprite;
+          return true;
         }
       }
-      return false;
     }
-
-    cloud.words = function(x) {
-      if (!arguments.length) return words;
-      words = x;
-      return cloud;
-    };
-
-    cloud.dimensions = function(x) {
-      if (!arguments.length) return dimensions;
-      dimensions = [+x[0], +x[1]];
-      return cloud;
-    };
-
-    cloud.font = function(x) {
-      if (!arguments.length) return font;
-      font = functor(x);
-      return cloud;
-    };
-
-    cloud.fontStyle = function(x) {
-      if (!arguments.length) return fontStyle;
-      fontStyle = functor(x);
-      return cloud;
-    };
-
-    cloud.fontWeight = function(x) {
-      if (!arguments.length) return fontWeight;
-      fontWeight = functor(x);
-      return cloud;
-    };
-
-    cloud.rotate = function(x) {
-      if (!arguments.length) return rotate;
-      rotate = functor(x);
-      return cloud;
-    };
-
-    cloud.text = function(x) {
-      if (!arguments.length) return text;
-      text = functor(x);
-      return cloud;
-    };
-
-    cloud.spiral = function(x) {
-      if (!arguments.length) return spiral;
-      spiral = spirals[x + ""] || x;
-      return cloud;
-    };
-
-    cloud.fontSize = function(x) {
-      if (!arguments.length) return fontSize;
-      fontSize = functor(x);
-      return cloud;
-    };
-
-    cloud.padding = function(x) {
-      if (!arguments.length) return padding;
-      padding = functor(x);
-      return cloud;
-    };
-
-    return cloud;
+    return false;
   }
+
+  cloud.words = function(x) {
+    if (!arguments.length) return words;
+    words = x;
+    return cloud;
+  };
+
+  cloud.dimensions = function(x) {
+    if (!arguments.length) return dimensions;
+    dimensions = [+x[0], +x[1]];
+    return cloud;
+  };
+
+  cloud.font = function(x) {
+    if (!arguments.length) return font;
+    font = functor(x);
+    return cloud;
+  };
+
+  cloud.fontStyle = function(x) {
+    if (!arguments.length) return fontStyle;
+    fontStyle = functor(x);
+    return cloud;
+  };
+
+  cloud.fontWeight = function(x) {
+    if (!arguments.length) return fontWeight;
+    fontWeight = functor(x);
+    return cloud;
+  };
+
+  cloud.rotate = function(x) {
+    if (!arguments.length) return rotate;
+    rotate = functor(x);
+    return cloud;
+  };
+
+  cloud.text = function(x) {
+    if (!arguments.length) return text;
+    text = functor(x);
+    return cloud;
+  };
+
+  cloud.spiral = function(x) {
+    if (!arguments.length) return spiral;
+    spiral = spirals[x + ""] || x;
+    return cloud;
+  };
+
+  cloud.fontSize = function(x) {
+    if (!arguments.length) return fontSize;
+    fontSize = functor(x);
+    return cloud;
+  };
+
+  cloud.padding = function(x) {
+    if (!arguments.length) return padding;
+    padding = functor(x);
+    return cloud;
+  };
+
+
 
   function cloudText(d) {
     return d.text;
@@ -194,20 +196,20 @@ export default function cloud() {
   // Load in batches for speed.
   function cloudSprite(d, data, di) {
     if (d.sprite) return;
-    c.clearRect(0, 0, (cw << 5) / ratio, ch / ratio);
-    var x = 0,
+    ctx.clearRect(0, 0, (cw << 5) / ratio, ch / ratio);
+    let x = 0,
     y = 0,
     maxh = 0,
     n = data.length;
     --di;
     while (++di < n) {
       d = data[di];
-      c.save();
-      c.font = d.style + " " + d.weight + " " + ~~((d.size + 1) / ratio) + "px " + d.font;
-      var w = c.measureText(d.text + "m").width * ratio,
+      ctx.save();
+      ctx.font = d.style + " " + d.weight + " " + ~~((d.size + 1) / ratio) + "px " + d.font;
+      let w = ctx.measureText(d.text + "m").width * ratio,
       h = d.size << 1;
       if (d.rotate) {
-        var sr = Math.sin(d.rotate * cloudRadians),
+        let sr = Math.sin(d.rotate * cloudRadians),
         cr = Math.cos(d.rotate * cloudRadians),
         wcr = w * cr,
         wsr = w * sr,
@@ -225,11 +227,11 @@ export default function cloud() {
         maxh = 0;
       }
       if (y + h >= ch) break;
-      c.translate((x + (w >> 1)) / ratio, (y + (h >> 1)) / ratio);
-      if (d.rotate) c.rotate(d.rotate * cloudRadians);
-      c.fillText(d.text, 0, 0);
-      if (d.padding) c.lineWidth = 2 * d.padding, c.strokeText(d.text, 0, 0);
-      c.restore();
+      ctx.translate((x + (w >> 1)) / ratio, (y + (h >> 1)) / ratio);
+      if (d.rotate) ctx.rotate(d.rotate * cloudRadians);
+      ctx.fillText(d.text, 0, 0);
+      if (d.padding) ctx.lineWidth = 2 * d.padding, ctx.strokeText(d.text, 0, 0);
+      ctx.restore();
       d.width = w;
       d.height = h;
       d.xoff = x;
@@ -241,24 +243,24 @@ export default function cloud() {
       d.hasText = true;
       x += w;
     }
-    var pixels = c.getImageData(0, 0, (cw << 5) / ratio, ch / ratio).data,
+    let pixels = ctx.getImageData(0, 0, (cw << 5) / ratio, ch / ratio).data,
     sprite = [];
     while (--di >= 0) {
       d = data[di];
       if (!d.hasText) continue;
-      var w = d.width,
+      let w = d.width,
       w32 = w >> 5,
       h = d.y1 - d.y0;
       // Zero the buffer
-      for (var i = 0; i < h * w32; i++) sprite[i] = 0;
+      for (let i = 0; i < h * w32; i++) sprite[i] = 0;
       x = d.xoff;
       if (x == null) return;
       y = d.yoff;
-      var seen = 0,
+      let seen = 0,
       seenRow = -1;
-      for (var j = 0; j < h; j++) {
-        for (var i = 0; i < w; i++) {
-          var k = w32 * j + (i >> 5),
+      for (let j = 0; j < h; j++) {
+        for (let i = 0; i < w; i++) {
+          let k = w32 * j + (i >> 5),
           m = pixels[((y + j) * (cw << 5) + (x + i)) << 2] ? 1 << (31 - (i % 32)) : 0;
           sprite[k] |= m;
           seen |= m;
@@ -279,7 +281,7 @@ export default function cloud() {
   // Use mask-based collision detection.
   function cloudCollide(tag, board, sw) {
     sw >>= 5;
-    var sprite = tag.sprite,
+    let sprite = tag.sprite,
     w = tag.width >> 5,
     lx = tag.x - (w << 4),
     sx = lx & 0x7f,
@@ -287,9 +289,9 @@ export default function cloud() {
     h = tag.y1 - tag.y0,
     x = (tag.y + tag.y0) * sw + (lx >> 5),
     last;
-    for (var j = 0; j < h; j++) {
+    for (let j = 0; j < h; j++) {
       last = 0;
-      for (var i = 0; i <= w; i++) {
+      for (let i = 0; i <= w; i++) {
         if (((last << msx) | (i < w ? (last = sprite[j * w + i]) >>> sx : 0))
         & board[x + i]) return true;
       }
@@ -299,7 +301,7 @@ export default function cloud() {
   }
 
   function cloudBounds(bounds, d) {
-    var b0 = bounds[0],
+    let b0 = bounds[0],
     b1 = bounds[1];
     if (d.x + d.x0 < b0.x) b0.x = d.x + d.x0;
     if (d.y + d.y0 < b0.y) b0.y = d.y + d.y0;
@@ -312,19 +314,19 @@ export default function cloud() {
   }
 
   function archimedeanSpiral(dimensions) {
-    var e = dimensions[0] / dimensions[1];
+    let e = dimensions[0] / dimensions[1];
     return function(t) {
       return [e * (t *= .1) * Math.cos(t), t * Math.sin(t)];
     };
   }
 
   function rectangularSpiral(dimensions) {
-    var dy = 4,
+    let dy = 4,
     dx = dy * dimensions[0] / dimensions[1],
     x = 0,
     y = 0;
     return function(t) {
-      var sign = t < 0 ? -1 : 1;
+      let sign = t < 0 ? -1 : 1;
       // See triangular numbers: T_n = n * (n + 1) / 2.
       switch ((Math.sqrt(1 + 4 * sign * t) - sign) & 3) {
         case 0:  x += dx; break;
@@ -340,9 +342,9 @@ export default function cloud() {
     return new Array(length).fill(0);
   }
 
-  var cloudRadians = Math.PI / 180,
-  cw = 1 << 11 >> 5,
-  ch = 1 << 11,
+  let cloudRadians = Math.PI / 180,
+  cw = 64,
+  ch = 2048,
   canvas,
   ratio = 1;
 
@@ -358,16 +360,21 @@ export default function cloud() {
     canvas = new Canvas(cw << 5, ch);
   }
 
-  var c = canvas.getContext("2d"),
+  let ctx = canvas.getContext("2d"),
   spirals = {
     archimedean: archimedeanSpiral,
     rectangular: rectangularSpiral
   };
-  c.fillStyle = c.strokeStyle = "red";
-  c.textAlign = "center";
-
+  ctx.fillStyle = ctx.strokeStyle = "red";
+  ctx.textAlign = "center";
 
   function functor(value) {
     if(typeof value === "function") return value;
     return () => value;
   }
+
+
+
+
+  return cloud;
+}
