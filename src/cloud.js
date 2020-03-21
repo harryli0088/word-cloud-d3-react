@@ -40,8 +40,10 @@ export default function cloud() {
         let d = data[i];
         d.x = (dimensions[0] * (Math.random() + .5)) >> 1;
         d.y = (dimensions[1] * (Math.random() + .5)) >> 1;
+        // if(d.key === "Harry") console.log(d.key, dimensions[0], dimensions[1], d.x, d.y)
         cloudSprite(d, data, i);
         if (d.hasText && place(board, d, bounds)) {
+          // if(d.key === "Harry") console.log(d.key, dimensions[0] >> 1, dimensions[1] >> 1)
           tags.push(d);
           if (bounds) cloudBounds(bounds, d);
           else bounds = [{x: d.x + d.x0, y: d.y + d.y0}, {x: d.x + d.x1, y: d.y + d.y1}];
@@ -49,6 +51,8 @@ export default function cloud() {
           d.x -= dimensions[0] >> 1;
           d.y -= dimensions[1] >> 1;
         }
+        // if(d.key === "Harry") console.log(d.key, dimensions[0], dimensions[1], d.x, d.y)
+
       }
     }
   }
@@ -321,7 +325,7 @@ export default function cloud() {
   }
 
   function rectangularSpiral(dimensions) {
-    let dy = 4,
+    let dy = 10,
     dx = dy * dimensions[0] / dimensions[1],
     x = 0,
     y = 0;

@@ -38,7 +38,7 @@ export default class WordCloud extends React.Component {
 
     this.state = {
       width: 500,
-      height: 500
+      height: 600
     }
 
     this.containerRef = React.createRef()
@@ -85,8 +85,11 @@ export default class WordCloud extends React.Component {
 
     const fill = colorFunction || d3.scaleOrdinal().domain(data.map(d => d.value)).range(d3.schemeCategory10);
 
-    const fontScale = d3.scaleLinear().domain([0, d3.max(data, d => d.value)]).range([10,200]);
+    const count = data.reduce((sum, word) => sum + Math.pow(word.key.length, 0.8), 0);
+    const scale = width * height / Math.pow(count,0.4) / 2000;
 
+    const fontScale = d3.scaleLinear().domain([0, d3.max(data, d => d.value)]).range([scale,2*scale]);
+    console.log("------------------------")
     const processedWords = cloud()
     .dimensions([width, height])
     .words(JSON.parse(JSON.stringify(data)))
@@ -97,8 +100,8 @@ export default class WordCloud extends React.Component {
     .spiral(spiral)
     .compute();
 
-    console.log("processedWords", processedWords)
-
+    console.log("count",count,"scale",scale,"processedWords", processedWords.length, processedWords.reduce((sum, word) => sum + (word.hasText?1:0), 0))
+    if(processedWords.length < 11) console.log(processedWords.map(d => ({x: d.x, y:d.y})))
 
     return (
       <div ref={this.containerRef}>
