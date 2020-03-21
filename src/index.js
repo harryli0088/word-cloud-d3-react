@@ -86,9 +86,9 @@ export default class WordCloud extends React.Component {
     const fill = colorFunction || d3.scaleOrdinal().domain(data.map(d => d.value)).range(d3.schemeCategory10);
 
     const count = data.reduce((sum, word) => sum + Math.pow(word.key.length, 0.8), 0);
-    const scale = width * height / Math.pow(count,0.4) / 2000;
+    const scale = width * height / Math.pow(count,0.1) / 3000;
 
-    const fontScale = d3.scaleLinear().domain([0, d3.max(data, d => d.value)]).range([scale,2*scale]);
+    const fontScale = d3.scaleLinear().domain([0, d3.max(data, d => d.value)]).range([8,2*scale]);
     console.log("------------------------")
     const processedWords = cloud()
     .dimensions([width, height])
