@@ -3,17 +3,35 @@ import * as d3 from 'd3'
 // Word cloud layout by Jason Davies, http://www.jasondavies.com/word-cloud/
 // Algorithm due to Jonathan Feinberg, http://static.mrfeinberg.com/bv_ch03.pdf
 export default function cloud() {
-  const radiansPerDegree = Math.PI / 180,
-  cw = 2048,
-  ch = 2048;
+  const radiansPerDegree = Math.PI / 180;
+  const cw = 2048;
+  const ch = 2048;
+  const spirals = {
+    archimedean: archimedeanSpiral,
+    rectangular: rectangularSpiral
+  };
 
-  let dimensions = [256, 256], //the dimensions of the space we're working in
-  fontStyle = cloudFontNormal,
-  fontWeight = cloudFontNormal,
-  spiral = archimedeanSpiral,
-  words = [],
-  cloud = {},
-  canvas;
+  let dimensions = [256, 256]; //the dimensions of the space we're working in
+  let fontStyle = cloudFontNormal;
+  let fontWeight = cloudFontNormal;
+  let spiral = archimedeanSpiral;
+  let words = [];
+  let cloud = {};
+  let canvas;
+
+  if (typeof document !== "undefined") {
+    canvas = document.createElement("canvas");
+    canvas.width = 1;
+    canvas.height = 1;
+    canvas.width = cw;
+    canvas.height = ch;
+  } else {
+    canvas = new Canvas(cw, ch); // Attempt to use node-canvas.
+  }
+
+  const ctx = canvas.getContext("2d");
+  ctx.fillStyle = ctx.strokeStyle = "red";
+  ctx.textAlign = "center";
 
 
   function text(d) {
@@ -81,33 +99,38 @@ export default function cloud() {
   }
 
 
-  function place(board, tag, bounds) {
-    const hypotenuse = Math.sqrt(dimensions[0] * dimensions[0] + dimensions[1] * dimensions[1]),
-    mySpiral = spiral(dimensions);
+  function place(board, tag, bounds) { //the parameter tag is the word or data point
+    const hypotenuse = Math.hypot(dimensions[0], dimensions[1]);
+    const mySpiral = spiral(dimensions); //get the spiral function
 
-    let perimeter = [{x: 0, y: 0}, {x: dimensions[0], y: dimensions[1]}], //top left and bottom right corners of the canvas
-    startX = tag.x, //word x
-    startY = tag.y, //word y
-    dt = Math.random() < .5 ? 1 : -1,
-    t = -dt,
-    dxdy,
-    dx,
-    dy;
+    const startX = tag.x; //starting x position of the tag
+    const startY = tag.y; //starting x position of the tag
+    const dt = Math.random() < .5 ? 1 : -1; //randomly pick 1 or -1
+    let t = -dt; //randomly set to opposite of dt (-1 or 1)
+    let dxdy; //used to get the return value of the spiral function in the form [dx, dy]
+    let dx; //used to get the x value of the spiral function
+    let dy; //used to get the y value of the spiral function
 
-    while (dxdy = mySpiral(t += dt)) {
-      dx = ~~dxdy[0];
-      dy = ~~dxdy[1];
+    while (true) {
+      dxdy = mySpiral(t += dt); //get the dx dy as we continue moving along the spiral
+      dx = ~~dxdy[0]; //floor the dx value
+      dy = ~~dxdy[1]; //floor the dy value
 
-      if (Math.min(dx, dy) > hypotenuse) break;
+      if (Math.min(dx, dy) > hypotenuse) { //if either the dx or dy exceeds the hypotenuse
+        break; //break out of the loop
+      }
 
+      //translate the tag
       tag.x = startX + dx;
       tag.y = startY + dy;
 
-      if (
-        tag.x + tag.x0 < 0 || tag.y + tag.y0 < 0 ||
-        tag.x + tag.x1 > dimensions[0] || tag.y + tag.y1 > dimensions[1]
+      if ( //if any part of the word is outside the dimensions
+        tag.x + tag.x0 < 0 || //if the left side of the tag exceeds the left side of the dimensions
+        tag.y + tag.y0 < 0 || //if the top of the tag exceeds the top of the dimensions
+        tag.x + tag.x1 > dimensions[0] || //if the right side of the tag exceeds the right side of the dimensions
+        tag.y + tag.y1 > dimensions[1] //if the bottom of the tag exceeds the bottom of the dimensions
       ) {
-        continue;
+        continue; //continue to the next iteration of the loop, skipping the collision calculation below
       }
       // TODO only check for collisions within current bounds.
       if (!bounds || !cloudCollide(tag, board, dimensions[0])) {
@@ -352,20 +375,20 @@ export default function cloud() {
     return a.x + a.x1 > b[0].x && a.x + a.x0 < b[1].x && a.y + a.y1 > b[0].y && a.y + a.y0 < b[1].y;
   }
 
-  function archimedeanSpiral(dimensions) {
-    let e = dimensions[0] / dimensions[1];
+  function archimedeanSpiral(dimensions) { //prepare the archimedean spiral function given the dimensions
+    let e = dimensions[0] / dimensions[1]; //the ratio of the dimention width / height
     return function(t) {
       return [e * (t *= .1) * Math.cos(t), t * Math.sin(t)];
     };
   }
 
-  function rectangularSpiral(dimensions) {
-    let dy = 10,
-    dx = dy * dimensions[0] / dimensions[1],
-    x = 0,
-    y = 0;
+  function rectangularSpiral(dimensions) { //prepare a rectangular spiral function given the dimensions
+    let dy = 4;
+    let dx = dy * dimensions[0] / dimensions[1];
+    let x = 0;
+    let y = 0;
     return function(t) {
-      let sign = t < 0 ? -1 : 1;
+      const sign = t < 0 ? -1 : 1; //get the sign of the t without returning zero
       // See triangular numbers: T_n = n * (n + 1) / 2.
       switch ((Math.sqrt(1 + 4 * sign * t) - sign) & 3) {
         case 0:  x += dx; break;
@@ -381,24 +404,6 @@ export default function cloud() {
     return new Array(length).fill(0);
   }
 
-  if (typeof document !== "undefined") {
-    canvas = document.createElement("canvas");
-    canvas.width = 1;
-    canvas.height = 1;
-    canvas.width = cw;
-    canvas.height = ch;
-  } else {
-    // Attempt to use node-canvas.
-    canvas = new Canvas(cw, ch);
-  }
-
-  let ctx = canvas.getContext("2d"),
-  spirals = {
-    archimedean: archimedeanSpiral,
-    rectangular: rectangularSpiral
-  };
-  ctx.fillStyle = ctx.strokeStyle = "red";
-  ctx.textAlign = "center";
 
   function functor(value) {
     if(typeof value === "function") return value;
