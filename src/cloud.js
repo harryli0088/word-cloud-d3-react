@@ -84,12 +84,16 @@ export default function cloud() {
         cloudSprite(d, data, i);
 
         if (d.hasText && place(board, d, bounds)) {
-          if (bounds) {
-            cloudBounds(bounds, d);
+          if (bounds) { //if we have bounds (all words after the first word)
+            cloudBounds(bounds, d); //adjust the bounds so that they contain this new word
           }
-          else {
-            bounds = [{x: d.x + d.x0, y: d.y + d.y0}, {x: d.x + d.x1, y: d.y + d.y1}];
+          else { //else this is the first word
+            bounds = [
+              {x: d.x + d.x0, y: d.y + d.y0}, //top left corner of the word
+              {x: d.x + d.x1, y: d.y + d.y1} //bottom right corner of the word
+            ];
           }
+
           //center the word in the space by translating by half of each dimension
           d.x -= dimensions[0] >> 1;
           d.y -= dimensions[1] >> 1;
@@ -98,7 +102,7 @@ export default function cloud() {
     }
   }
 
-
+  //returns true if the word was properly placed in the board without collision, else returns false that the word exceeded the dimensions
   function place(board, tag, bounds) { //the parameter tag is the word or data point
     const hypotenuse = Math.hypot(dimensions[0], dimensions[1]);
     const mySpiral = spiral(dimensions); //get the spiral function
@@ -120,7 +124,7 @@ export default function cloud() {
         break; //break out of the loop
       }
 
-      //translate the tag
+      //set a new position for the tag by translating the tag along the spiral
       tag.x = startX + dx;
       tag.y = startY + dy;
 
@@ -239,44 +243,47 @@ export default function cloud() {
     }
 
     ctx.clearRect(0, 0, cw, ch); //clear the whole canvas
-    let x = 0,
-    y = 0,
-    maxh = 0,
-    n = data.length;
+
+    let x = 0;
+    let y = 0;
+    let maxh = 0;
+    let n = data.length;
     --dataIndex; //decrement the data index before the while loop
     while (++dataIndex < n) { //loop through the subsequent data points
       d = data[dataIndex]; //get the next word
       ctx.save(); //save the current canvas state
       ctx.font = d.style + " " + d.weight + " " + ~~(d.size + 1) + "px " + d.font; //set the font for this word
-      let w = ctx.measureText(d.text + "m").width,
-      h = d.size << 1;
+      let w = ctx.measureText(d.text + "m").width;
+      let h = d.size << 1;
 
-      if (d.rotate) {
-        let sr = Math.sin(d.rotate * radiansPerDegree),
-        cr = Math.cos(d.rotate * radiansPerDegree),
-        wcr = w * cr,
-        wsr = w * sr,
-        hcr = h * cr,
-        hsr = h * sr;
+      if (d.rotate) { //if we should be rotating this word
+        const sr = Math.sin(d.rotate * radiansPerDegree);
+        const cr = Math.cos(d.rotate * radiansPerDegree);
+        const wcr = w * cr;
+        const wsr = w * sr;
+        const hcr = h * cr;
+        const hsr = h * sr;
         w = (Math.max(Math.abs(wcr + hsr), Math.abs(wcr - hsr)) + 31) >> 5 << 5;
         h = ~~Math.max(Math.abs(wsr + hcr), Math.abs(wsr - hcr));
       }
       else {
-        w = (w + 31) >> 5 << 5;
+        w = (w + 31) >> 5 << 5; //round up to the next closest multiple of 32
       }
 
-      if (h > maxh) {
-        maxh = h;
+      if (h > maxh) { //if this height of the word is higher than the max we currently have
+        maxh = h; //set new max height
       }
-      if (x + w >= (cw)) {
+
+      if (x + w >= cw) { //if the right side of the word exceeds the right side of the canvas
         x = 0;
         y += maxh;
         maxh = 0;
       }
 
-      if (y + h >= ch) {
+      if (y + h >= ch) { //if the bottom of the word exceeds the bottom of the canvas
         break;
       }
+
       ctx.translate(x + (w >> 1), y + (h >> 1)); //translate the canvas so that the origin is about the center of the word
       if (d.rotate) {
         ctx.rotate(d.rotate * radiansPerDegree);
@@ -292,10 +299,10 @@ export default function cloud() {
       d.height = h;
       d.xoff = x;
       d.yoff = y;
-      d.x1 = w >> 1; //about half the width
-      d.y1 = h >> 1; //about half the height
-      d.x0 = -d.x1;
-      d.y0 = -d.y1;
+      d.x1 = w >> 1; //about the right width of the word
+      d.y1 = h >> 1; //about the bottom height of the word
+      d.x0 = -d.x1; //about the left width of the word
+      d.y0 = -d.y1; //about the top height of the word
       d.hasText = true;
       x += w;
     }
@@ -362,13 +369,23 @@ export default function cloud() {
     return false;
   }
 
+  //this function makes sure that the bounds contains the whole word
   function cloudBounds(bounds, d) {
-    let b0 = bounds[0],
-    b1 = bounds[1];
-    if (d.x + d.x0 < b0.x) b0.x = d.x + d.x0;
-    if (d.y + d.y0 < b0.y) b0.y = d.y + d.y0;
-    if (d.x + d.x1 > b1.x) b1.x = d.x + d.x1;
-    if (d.y + d.y1 > b1.y) b1.y = d.y + d.y1;
+    const b0 = bounds[0];
+    const b1 = bounds[1];
+
+    if (d.x + d.x0 < b0.x) { //if the left side of the word is less than the left side of the bounds
+      b0.x = d.x + d.x0; //set the bounds to the left side of this word
+    }
+    if (d.y + d.y0 < b0.y) { //if the top of the word is less than the top of the bounds
+      b0.y = d.y + d.y0; //set the bounds to the top of this word
+    }
+    if (d.x + d.x1 > b1.x) { //if the right side of the word is greater than the right side of the bounds
+      b1.x = d.x + d.x1; //set the bounds to the right side of this word
+    }
+    if (d.y + d.y1 > b1.y) { //if the bottom of the word is greater than the bottom of the bounds
+      b1.y = d.y + d.y1; //set the bounds to the bottom of this word
+    }
   }
 
   function collideRects(a, b) {
