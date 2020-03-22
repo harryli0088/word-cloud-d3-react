@@ -83,12 +83,12 @@ export default function cloud() {
 
         cloudSprite(d, data, i);
 
-        if (d.hasText && place(board, d, bounds)) {
+        if (d.hasText && place(board, d, bounds)) { //if the word has text AND was properly placed
           if (bounds) { //if we have bounds (all words after the first word)
             cloudBounds(bounds, d); //adjust the bounds so that they contain this new word
           }
           else { //else this is the first word
-            bounds = [
+            bounds = [ //set the bounds to contain this word
               {x: d.x + d.x0, y: d.y + d.y0}, //top left corner of the word
               {x: d.x + d.x1, y: d.y + d.y1} //bottom right corner of the word
             ];
@@ -141,7 +141,7 @@ export default function cloud() {
         if (!bounds || collideRects(tag, bounds)) {
           let sprite = tag.sprite,
           w = tag.width >> 5,
-          sw = dimensions[0] >> 5,
+          sw = dimensions[0] >> 5, //divide by 32 and floor
           lx = tag.x - (w << 4),
           sx = lx & 127,
           msx = 32 - sx,
@@ -342,31 +342,35 @@ export default function cloud() {
     }
   }
 
+  //returns true/false whether this tag collides with other words on the board
   // Use mask-based collision detection.
   function cloudCollide(tag, board, sw) {
-    sw >>= 5;
-    let sprite = tag.sprite,
-    w = tag.width >> 5,
-    lx = tag.x - (w << 4),
-    sx = lx & 127,
-    msx = 32 - sx,
-    h = tag.y1 - tag.y0,
-    x = (tag.y + tag.y0) * sw + (lx >> 5),
-    last;
-    for (let j = 0; j < h; j++) {
+    sw >>= 5; //divide by 32 and floor
+    let sprite = tag.sprite;
+    let w = tag.width >> 5; //divide by 32 and floor
+    let lx = tag.x - (w << 4); //subtract by w * 16
+    let sx = lx & 127; //basically lx & 128
+    let msx = 32 - sx;
+    let h = tag.y1 - tag.y0; //get height of tag
+    let x = (tag.y + tag.y0) * sw + (lx >> 5); //TODO I think this means which section in the board to inspect
+    let last;
+
+    for (let j = 0; j < h; j++) { //loop through each pixel column of the tag
       last = 0;
-      for (let i = 0; i <= w; i++) {
+      for (let i = 0; i <= w; i++) { //loop through each pixel row of the tag
         if (
-          ((last << msx) |
-          (i < w ? (last = sprite[j * w + i]) >>> sx : 0)) &
-          board[x + i]
+          (
+            (last << msx) |
+            (i < w ? (last = sprite[j * w + i]) >>> sx : 0)
+          ) &
+          board[x + i] //check this index in this section of the board
         ) {
-          return true;
+          return true; //TODO I think this means there is a collision
         }
       }
-      x += sw;
+      x += sw; //TODO I think this means to move on to the next section of the board
     }
-    return false;
+    return false; //TODO I think this means no collision
   }
 
   //this function makes sure that the bounds contains the whole word
