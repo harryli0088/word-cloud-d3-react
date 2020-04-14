@@ -55,10 +55,13 @@ export default function cloud() {
 
 
   cloud.compute = function() {
+    const numberRows = dimensions[0] >> 5
+    const numberColumns = dimensions[1]
+
     ctx.clearRect(0,0,canvas.width,canvas.height) //clear the canvas on which we will make calculations
-    let board = zeroArray((dimensions[0] >> 5) * dimensions[1]),
-    bounds = null,
-    data = words.map(function(d, i) { //initialize some fields for each word
+    let board = zeroArray(numberRows *numberColumns);
+    let bounds = null;
+    let data = words.map(function(d, i) { //initialize some fields for each word
       d.text = text.call(this, d, i);
       d.font = font.call(this, d, i);
       d.style = fontStyle.call(this, d, i);
@@ -68,10 +71,6 @@ export default function cloud() {
       d.padding = padding.call(this, d, i);
       return d;
     }).sort(function(a, b) { return b.size - a.size; }); //sort the words largest to smallest
-
-    step(data); //calculate the position and size of all the words
-
-    return data; //return all the data
 
     function step(data) {
       for(let i=0; i<data.length; ++i) { //run this code on every word
@@ -99,7 +98,54 @@ export default function cloud() {
           d.y -= dimensions[1] >> 1;
         }
       }
+
+      const empty = {
+        top: 0, bottom: 0, left: 0, right: 0,
+      }
+
+      console.log("DIMENSIONS",dimensions[0],(dimensions[0] >> 5),(dimensions[1]))
+
+      const emptyRows = []
+      for(let rowIndex=0; rowIndex<board.length; rowIndex+=numberColumns) {
+        let allZeros = true
+        // console.log("rowIndex",rowIndex)
+        for(let colIndex=rowIndex; colIndex<rowIndex+numberColumns; ++colIndex) {
+          if(board[colIndex] !== 0) {
+           allZeros = false
+           break
+          }
+        }
+
+        emptyRows.push(allZeros)
+      }
+
+      for(let i=0; i<emptyRows.length; ++i) {
+        if(emptyRows[i] === false) {
+          break
+        }
+        ++empty.top
+      }
+
+      let emptyBottomRowsCount = 0
+      for(let i=emptyRows.length-1; i>=0; --i) {
+        if(emptyRows[i] === false) {
+          break
+        }
+        ++empty.bottom
+      }
+      return empty
     }
+
+    const empty = step(data); //calculate the position and size of all the words
+
+    empty.top *= dimensions[1] / numberRows
+    empty.bottom *= dimensions[1] / numberRows
+    empty.verticalFilled = dimensions[1] - empty.top - empty.bottom
+
+    return {
+      words: data,
+      empty,
+    }; //return all the data
   }
 
   //returns true if the word was properly placed in the board without collision, else returns false that the word exceeded the dimensions
@@ -307,29 +353,40 @@ export default function cloud() {
       x += w;
     }
 
-    let pixels = ctx.getImageData(0, 0, cw, ch).data,
-    sprite = [];
-    while (--dataIndex >= 0) {
-      d = data[dataIndex];
-      if (!d.hasText) continue;
-      let w = d.width,
-      w32 = w >> 5,
-      h = d.y1 - d.y0;
-      // Zero the buffer
-      for (let i = 0; i < h * w32; i++) sprite[i] = 0;
+    let pixels = ctx.getImageData(0, 0, cw, ch).data; //get the image data on the canvas
+    let sprite = [];
+    while (--dataIndex >= 0) { //move backwards through the daa points
+      d = data[dataIndex]; //get this data point
+
+      if (!d.hasText) { //if this data point does not have text
+        continue; //skip it and move to the next loop iteration
+      }
+
+      let w = d.width;
+      let w32 = w >> 5; //divide by 32 and floor
+      let h = d.y1 - d.y0; //height of this word
+
+      // Zero the sprite buffer
+      for (let i = 0; i < h * w32; i++) { //zero to height times w32 of this data point
+        sprite[i] = 0;
+      }
       x = d.xoff;
-      if (x == null) return;
+      if (x == null) {
+        return;
+      }
       y = d.yoff;
-      let seen = 0,
-      seenRow = -1;
-      for (let j = 0; j < h; j++) {
-        for (let i = 0; i < w; i++) {
-          let k = w32 * j + (i >> 5),
+      let seen = 0;
+      let seenRow = -1;
+      for (let j = 0; j < h; j++) { //loop through each pixel column in the word
+        for (let i = 0; i < w; i++) { //loop throguh each pixel row in the word
+          const k = w32 * j + (i >> 5),
           m = pixels[((y + j) * (cw) + (x + i)) << 2] ? 1 << (31 - (i % 32)) : 0;
-          sprite[k] |= m;
-          seen |= m;
+          sprite[k] |= m; //sprite[k] = sprite[k] | m
+          seen |= m; //seen = seen | m
         }
-        if (seen) seenRow = j;
+        if (seen) {
+          seenRow = j;
+        }
         else {
           d.y0++;
           h--;
@@ -360,9 +417,9 @@ export default function cloud() {
       for (let i = 0; i <= w; i++) { //loop through each pixel row of the tag
         if (
           (
-            (last << msx) |
+            (last << msx) | //bitwise or
             (i < w ? (last = sprite[j * w + i]) >>> sx : 0)
-          ) &
+          ) & //bitwise and
           board[x + i] //check this index in this section of the board
         ) {
           return true; //TODO I think this means there is a collision

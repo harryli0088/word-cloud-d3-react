@@ -90,7 +90,10 @@ export default class WordCloud extends React.Component {
 
     const fontScale = d3.scaleLinear().domain([0, d3.max(data, d => d.value)]).range([8,2*scale]);
     console.log("------------------------")
-    const processedWords = cloud()
+    const {
+      words,
+      empty,
+    } = cloud()
     .dimensions([width, height])
     .words(JSON.parse(JSON.stringify(data)))
     .fontSize(function(d) { return fontScale(+d.value); })
@@ -100,14 +103,18 @@ export default class WordCloud extends React.Component {
     .spiral(spiral)
     .compute();
 
-    console.log("count",count,"scale",scale,"processedWords", processedWords.length, processedWords.reduce((sum, word) => sum + (word.hasText?1:0), 0))
-    if(processedWords.length < 11) console.log(processedWords.map(d => ({x: d.x, y:d.y})))
+    console.log("EMPTY", empty)
+    //
+    // console.log("count",count,"scale",scale,"words", words.length, words.reduce((sum, word) => sum + (word.hasText?1:0), 0))
+    // if(words.length < 11) console.log(words.map(d => ({x: d.x, y:d.y})))
+    //
+    const yScale = 1 + (empty.top + empty.bottom)/empty.verticalFilled
 
     return (
       <div ref={this.containerRef}>
         <svg width={width} height={height} style={{border: "1px solid black"}}>
-          <g transform={"translate("+(width/2)+","+(height/2)+")"}>
-            {processedWords.map((word,i) =>
+          <g transform={"scale(1,"+yScale+") translate("+(width/2)+","+(height/2 - empty.top)+")"}>
+            {words.map((word,i) =>
               <text
                 key={i}
 
@@ -127,6 +134,10 @@ export default class WordCloud extends React.Component {
               </text>
             )}
           </g>
+
+          <line x1={width/2} x2={width/2} y1={height-empty.bottom} y2={height} strokeWidth="5" stroke="gray"></line>
+          <line x1={width/2} x2={width/2} y1={empty.top} y2={empty.top+empty.verticalFilled} strokeWidth="5" stroke="pink"></line>
+          <line x1={width/2} x2={width/2} y1={0} y2={empty.top} strokeWidth="5" stroke="gray"></line>
         </svg>
       </div>
     )
