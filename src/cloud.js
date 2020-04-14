@@ -114,7 +114,7 @@ export default function cloud() {
 
   function calculateWhiteSpace(board, boardWidth, boardHeight) {
     const whiteSpace = {
-      top: 0, verticalFilled: 0, bottom: 0, left: 0, right: 0,
+      top: 0, verticalFilled: 0, bottom: 0, left: 0, horizontalFilledSpace: 0, right: 0,
     }
 
     console.log("DIMENSIONS",boardWidth,boardHeight)
@@ -142,7 +142,6 @@ export default function cloud() {
     }
 
     //count the numebr of empty rows on bottom
-    let emptyBottomRowsCount = 0
     for(let i=emptyRows.length-1; i>=0; --i) {
       if(emptyRows[i] === false) {
         break
@@ -157,20 +156,43 @@ export default function cloud() {
 
     //calculate which columns are empty
     const emptyColumns = []
-    for(let colIndex=0; colIndex<boardWidth; ++colIndex) {
+    for(let j=0; j<boardWidth; ++j) {
       let allZeros = true
-      // console.log("rowIndex",rowIndex)
-      for(let rowIndex=colIndex; rowIndex<board.length; rowIndex+=boardWidth) {
-        // console.log("colIndex",colIndex,"rowIndex", rowIndex)
-        if(board[rowIndex] !== 0) {
-         allZeros = false
-         break
+      for(let i=0; i<boardHeight; ++i) {
+        if(board[i*boardWidth + j] !== 0) {
+          allZeros = false
+          break;
         }
       }
 
       emptyColumns.push(allZeros)
     }
-    // console.log('emptyColumns',emptyColumns)
+
+    console.log("emptyColumns",emptyColumns)
+
+    //count the number of empty columns on the left
+    for(let i=0; i<emptyColumns.length; ++i) {
+      if(emptyColumns[i] === false) {
+        break
+      }
+      ++whiteSpace.left
+    }
+
+    //count the numebr of empty columns on the right
+    for(let i=emptyColumns.length-1; i>=0; --i) {
+      if(emptyColumns[i] === false) {
+        break
+      }
+      ++whiteSpace.right
+    }
+
+    whiteSpace.left *= dimensions[0] / boardWidth //convert back to pixels
+    whiteSpace.right *= dimensions[0] / boardWidth //convert back to pixels
+    whiteSpace.horizontalFilledSpace = dimensions[0] - whiteSpace.right - whiteSpace.left //calculate the pixel width of filled columns
+
+
+
+
 
     const newBoard = []
     for(let i=0; i<boardHeight; ++i) {

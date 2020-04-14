@@ -138,6 +138,10 @@ export default class WordCloud extends React.Component {
           <line x1={width/2} x2={width/2} y1={height-whiteSpace.bottom} y2={height} strokeWidth="5" stroke="gray"></line>
           <line x1={width/2} x2={width/2} y1={whiteSpace.top} y2={whiteSpace.top+whiteSpace.verticalFilled} strokeWidth="5" stroke="pink"></line>
           <line x1={width/2} x2={width/2} y1={0} y2={whiteSpace.top} strokeWidth="5" stroke="gray"></line>
+
+          <line x1={0} x2={whiteSpace.left} y1={height/2} y2={height/2} strokeWidth="5" stroke="gray"></line>
+          <line x1={whiteSpace.left} x2={whiteSpace.left+whiteSpace.horizontalFilledSpace} y1={height/2} y2={height/2} strokeWidth="5" stroke="pink"></line>
+          <line x1={width-whiteSpace.right} x2={width} y1={height/2} y2={height/2} strokeWidth="5" stroke="gray"></line>
         </svg>
       </div>
     )
