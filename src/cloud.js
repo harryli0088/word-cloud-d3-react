@@ -55,11 +55,12 @@ export default function cloud() {
 
 
   cloud.compute = function() {
-    const numberRows = dimensions[0] >> 5
-    const numberColumns = dimensions[1]
+    //TODO 606 is height pixels...?
+    const boardWidth = dimensions[0] >> 5
+    const boardHeight = dimensions[1] //606
 
     ctx.clearRect(0,0,canvas.width,canvas.height) //clear the canvas on which we will make calculations
-    let board = zeroArray(numberRows *numberColumns);
+    let board = zeroArray(boardWidth *boardHeight);
     let bounds = null;
     let data = words.map(function(d, i) { //initialize some fields for each word
       d.text = text.call(this, d, i);
@@ -106,24 +107,23 @@ export default function cloud() {
 
     return {
       words: data,
-      whiteSpace: calculateWhiteSpace(board, numberRows, numberColumns),
+      whiteSpace: calculateWhiteSpace(board, boardWidth, boardHeight),
     }; //return all the data
   }
 
 
-  function calculateWhiteSpace(board, numberRows, numberColumns) {
+  function calculateWhiteSpace(board, boardWidth, boardHeight) {
     const whiteSpace = {
       top: 0, verticalFilled: 0, bottom: 0, left: 0, right: 0,
     }
 
-    console.log("DIMENSIONS",dimensions[0],(dimensions[0] >> 5),(dimensions[1]))
+    console.log("DIMENSIONS",boardWidth,boardHeight)
 
     //calculate which rows are empty
     const emptyRows = []
-    for(let rowIndex=0; rowIndex<board.length; rowIndex+=numberColumns) {
+    for(let rowIndex=0; rowIndex<board.length; rowIndex+=boardWidth) {
       let allZeros = true
-      // console.log("rowIndex",rowIndex)
-      for(let colIndex=rowIndex; colIndex<rowIndex+numberColumns; ++colIndex) {
+      for(let colIndex=rowIndex; colIndex<rowIndex+boardWidth; ++colIndex) {
         if(board[colIndex] !== 0) {
          allZeros = false
          break
@@ -151,18 +151,18 @@ export default function cloud() {
     }
 
 
-    whiteSpace.top *= dimensions[1] / numberRows //convert rows to pixels
-    whiteSpace.bottom *= dimensions[1] / numberRows //convert rows to pixels
+    whiteSpace.top *= dimensions[1]
+    whiteSpace.bottom *= dimensions[1]
     whiteSpace.verticalFilled = dimensions[1] - whiteSpace.top - whiteSpace.bottom //calculate the pixel height of filled rows
 
 
 
     //calculate which columns are empty
     const emptyColumns = []
-    for(let colIndex=0; colIndex<numberColumns; ++colIndex) {
+    for(let colIndex=0; colIndex<boardWidth; ++colIndex) {
       let allZeros = true
       // console.log("rowIndex",rowIndex)
-      for(let rowIndex=colIndex; rowIndex<board.length; rowIndex+=numberColumns) {
+      for(let rowIndex=colIndex; rowIndex<board.length; rowIndex+=boardWidth) {
         // console.log("colIndex",colIndex,"rowIndex", rowIndex)
         if(board[rowIndex] !== 0) {
          allZeros = false
@@ -176,9 +176,9 @@ export default function cloud() {
 
     const newBoard = []
     let boardIndex = 0
-    for(let i=0; i<numberRows; ++i) {
+    for(let i=0; i<boardHeight; ++i) {
       newBoard.push([])
-      for(let j=0; j<numberColumns; ++j) {
+      for(let j=0; j<boardWidth; ++j) {
         newBoard[newBoard.length-1].push(board[boardIndex])
         ++boardIndex
       }

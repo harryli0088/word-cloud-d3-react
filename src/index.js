@@ -108,12 +108,12 @@ export default class WordCloud extends React.Component {
     // console.log("count",count,"scale",scale,"words", words.length, words.reduce((sum, word) => sum + (word.hasText?1:0), 0))
     // if(words.length < 11) console.log(words.map(d => ({x: d.x, y:d.y})))
     //
-    const yScale = 1 + (whiteSpace.top + whiteSpace.bottom) / whiteSpace.verticalFilled
+    const yScale = 1 // + (whiteSpace.top + whiteSpace.bottom) / whiteSpace.verticalFilled
 
     return (
       <div ref={this.containerRef}>
         <svg width={width} height={height} style={{border: "1px solid black"}}>
-          <g transform={"scale("+yScale+","+yScale+") translate("+(width/2 - (yScale-1)*width/2)+","+(height/2 - whiteSpace.top)+")"}>
+          <g transform={"scale("+yScale+","+yScale+") translate("+(width/2)+","+(height/2)+")"}>
             {words.map((word,i) =>
               <text
                 key={i}
