@@ -98,54 +98,95 @@ export default function cloud() {
           d.y -= dimensions[1] >> 1;
         }
       }
-
-      const empty = {
-        top: 0, bottom: 0, left: 0, right: 0,
-      }
-
-      console.log("DIMENSIONS",dimensions[0],(dimensions[0] >> 5),(dimensions[1]))
-
-      const emptyRows = []
-      for(let rowIndex=0; rowIndex<board.length; rowIndex+=numberColumns) {
-        let allZeros = true
-        // console.log("rowIndex",rowIndex)
-        for(let colIndex=rowIndex; colIndex<rowIndex+numberColumns; ++colIndex) {
-          if(board[colIndex] !== 0) {
-           allZeros = false
-           break
-          }
-        }
-
-        emptyRows.push(allZeros)
-      }
-
-      for(let i=0; i<emptyRows.length; ++i) {
-        if(emptyRows[i] === false) {
-          break
-        }
-        ++empty.top
-      }
-
-      let emptyBottomRowsCount = 0
-      for(let i=emptyRows.length-1; i>=0; --i) {
-        if(emptyRows[i] === false) {
-          break
-        }
-        ++empty.bottom
-      }
-      return empty
     }
 
-    const empty = step(data); //calculate the position and size of all the words
+    step(data); //calculate the position and size of all the words
 
-    empty.top *= dimensions[1] / numberRows
-    empty.bottom *= dimensions[1] / numberRows
-    empty.verticalFilled = dimensions[1] - empty.top - empty.bottom
+
 
     return {
       words: data,
-      empty,
+      whiteSpace: calculateWhiteSpace(board, numberRows, numberColumns),
     }; //return all the data
+  }
+
+
+  function calculateWhiteSpace(board, numberRows, numberColumns) {
+    const whiteSpace = {
+      top: 0, verticalFilled: 0, bottom: 0, left: 0, right: 0,
+    }
+
+    console.log("DIMENSIONS",dimensions[0],(dimensions[0] >> 5),(dimensions[1]))
+
+    //calculate which rows are empty
+    const emptyRows = []
+    for(let rowIndex=0; rowIndex<board.length; rowIndex+=numberColumns) {
+      let allZeros = true
+      // console.log("rowIndex",rowIndex)
+      for(let colIndex=rowIndex; colIndex<rowIndex+numberColumns; ++colIndex) {
+        if(board[colIndex] !== 0) {
+         allZeros = false
+         break
+        }
+      }
+
+      emptyRows.push(allZeros)
+    }
+
+    //count the number of empty rows on top
+    for(let i=0; i<emptyRows.length; ++i) {
+      if(emptyRows[i] === false) {
+        break
+      }
+      ++whiteSpace.top
+    }
+
+    //count the numebr of empty rows on bottom
+    let emptyBottomRowsCount = 0
+    for(let i=emptyRows.length-1; i>=0; --i) {
+      if(emptyRows[i] === false) {
+        break
+      }
+      ++whiteSpace.bottom
+    }
+
+
+    whiteSpace.top *= dimensions[1] / numberRows //convert rows to pixels
+    whiteSpace.bottom *= dimensions[1] / numberRows //convert rows to pixels
+    whiteSpace.verticalFilled = dimensions[1] - whiteSpace.top - whiteSpace.bottom //calculate the pixel height of filled rows
+
+
+
+    //calculate which columns are empty
+    const emptyColumns = []
+    for(let colIndex=0; colIndex<numberColumns; ++colIndex) {
+      let allZeros = true
+      // console.log("rowIndex",rowIndex)
+      for(let rowIndex=colIndex; rowIndex<board.length; rowIndex+=numberColumns) {
+        // console.log("colIndex",colIndex,"rowIndex", rowIndex)
+        if(board[rowIndex] !== 0) {
+         allZeros = false
+         break
+        }
+      }
+
+      emptyColumns.push(allZeros)
+    }
+    // console.log('emptyColumns',emptyColumns)
+
+    const newBoard = []
+    let boardIndex = 0
+    for(let i=0; i<numberRows; ++i) {
+      newBoard.push([])
+      for(let j=0; j<numberColumns; ++j) {
+        newBoard[newBoard.length-1].push(board[boardIndex])
+        ++boardIndex
+      }
+    }
+
+    console.log("newBoard",newBoard)
+
+    return whiteSpace
   }
 
   //returns true if the word was properly placed in the board without collision, else returns false that the word exceeded the dimensions
