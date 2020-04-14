@@ -114,97 +114,77 @@ export default function cloud() {
 
   function calculateWhiteSpace(board, boardWidth, boardHeight) {
     const whiteSpace = {
-      top: 0, verticalFilled: 0, bottom: 0, left: 0, horizontalFilledSpace: 0, right: 0,
+      top: -1, //start at -1 since the nested for loops increment this one extra time
+      verticalFilled: 0,
+      bottom: -1,
+      left: -1,
+      horizontalFilledSpace: 0,
+      right: -1,
     }
 
     console.log("DIMENSIONS",boardWidth,boardHeight)
 
     //calculate which rows are empty
-    const emptyRows = []
-    for(let i=0; i<boardHeight; ++i) {
-      let allZeros = true
-      for(let j=0; j<boardWidth; ++j) {
-        if(board[i*boardWidth + j] !== 0) {
-          allZeros = false
-          break;
+    for(let i=0; i<boardHeight; ++i) { //loop through each row going forwards
+      for(let j=0; j<boardWidth; ++j) { //loop through each column
+        if(board[i*boardWidth + j] !== 0) { //if this cell is not empty
+          //neither nested loop will run a second time (but will still finish this iteration)
+          i=boardHeight
+          j=boardWidth
         }
       }
 
-      emptyRows.push(allZeros)
+      ++whiteSpace.top //this entire row was empty, increment our top count (runs an extra time)
     }
 
-    //count the number of empty rows on top
-    for(let i=0; i<emptyRows.length; ++i) {
-      if(emptyRows[i] === false) {
-        break
+    //we don't need to check the middle rows
+
+    for(let i=boardHeight-1; i>=0; --i) { //loop through each row going backwards
+      for(let j=0; j<boardWidth; ++j) { //loop through each column
+        if(board[i*boardWidth + j] !== 0) { //if this cell is not empty
+          //neither nested loop will run a second time (but will still finish this iteration)
+          i=-1
+          j=boardWidth
+        }
       }
-      ++whiteSpace.top
-    }
 
-    //count the numebr of empty rows on bottom
-    for(let i=emptyRows.length-1; i>=0; --i) {
-      if(emptyRows[i] === false) {
-        break
-      }
-      ++whiteSpace.bottom
+      ++whiteSpace.bottom //this entire row was empty, increment our bottom count (runs an extra time)
     }
-
 
     whiteSpace.verticalFilled = dimensions[1] - whiteSpace.top - whiteSpace.bottom //calculate the pixel height of filled rows
 
 
 
     //calculate which columns are empty
-    const emptyColumns = []
-    for(let j=0; j<boardWidth; ++j) {
-      let allZeros = true
-      for(let i=0; i<boardHeight; ++i) {
-        if(board[i*boardWidth + j] !== 0) {
-          allZeros = false
-          break;
+    for(let j=0; j<boardWidth; ++j) { //loop through each column starting from the left then moving right
+      for(let i=0; i<boardHeight; ++i) { //loop through each row
+        if(board[i*boardWidth + j] !== 0) { //if this cell is not empty
+          //neither nested loop will run a second time (but will still finish this iteration)
+          j = boardWidth
+          i = boardHeight
         }
       }
 
-      emptyColumns.push(allZeros)
+      ++whiteSpace.left //this column was empty, increment our left counter (runs an extra time)
     }
 
-    console.log("emptyColumns",emptyColumns)
+    //we don't need to check the middle columns
 
-    //count the number of empty columns on the left
-    for(let i=0; i<emptyColumns.length; ++i) {
-      if(emptyColumns[i] === false) {
-        break
+    for(let j=boardWidth-1; j>=0; --j) { //loop through each column starting from the right then moving left
+      for(let i=0; i<boardHeight; ++i) { //loop through each row
+        if(board[i*boardWidth + j] !== 0) { //if this cell is not empty
+          //neither nested loop will run a second time (but will still finish this iteration)
+          j = -1
+          i = boardHeight
+        }
       }
-      ++whiteSpace.left
-    }
 
-    //count the numebr of empty columns on the right
-    for(let i=emptyColumns.length-1; i>=0; --i) {
-      if(emptyColumns[i] === false) {
-        break
-      }
-      ++whiteSpace.right
+      ++whiteSpace.right //this column was empty, increment our right counter (runs an extra time)
     }
 
     whiteSpace.left *= dimensions[0] / boardWidth //convert back to pixels
     whiteSpace.right *= dimensions[0] / boardWidth //convert back to pixels
     whiteSpace.horizontalFilledSpace = dimensions[0] - whiteSpace.right - whiteSpace.left //calculate the pixel width of filled columns
-
-
-
-
-
-    const newBoard = []
-    for(let i=0; i<boardHeight; ++i) {
-      newBoard.push([])
-      for(let j=0; j<boardWidth; ++j) {
-        newBoard[newBoard.length-1].push(
-          board[i*boardWidth + j]
-        )
-      }
-    }
-
-    console.log("newBoard",newBoard)
 
     return whiteSpace
   }
