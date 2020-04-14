@@ -121,12 +121,12 @@ export default function cloud() {
 
     //calculate which rows are empty
     const emptyRows = []
-    for(let rowIndex=0; rowIndex<board.length; rowIndex+=boardWidth) {
+    for(let i=0; i<boardHeight; ++i) {
       let allZeros = true
-      for(let colIndex=rowIndex; colIndex<rowIndex+boardWidth; ++colIndex) {
-        if(board[colIndex] !== 0) {
-         allZeros = false
-         break
+      for(let j=0; j<boardWidth; ++j) {
+        if(board[i*boardWidth + j] !== 0) {
+          allZeros = false
+          break;
         }
       }
 
@@ -151,8 +151,6 @@ export default function cloud() {
     }
 
 
-    whiteSpace.top *= dimensions[1]
-    whiteSpace.bottom *= dimensions[1]
     whiteSpace.verticalFilled = dimensions[1] - whiteSpace.top - whiteSpace.bottom //calculate the pixel height of filled rows
 
 
@@ -175,12 +173,12 @@ export default function cloud() {
     // console.log('emptyColumns',emptyColumns)
 
     const newBoard = []
-    let boardIndex = 0
     for(let i=0; i<boardHeight; ++i) {
       newBoard.push([])
       for(let j=0; j<boardWidth; ++j) {
-        newBoard[newBoard.length-1].push(board[boardIndex])
-        ++boardIndex
+        newBoard[newBoard.length-1].push(
+          board[i*boardWidth + j]
+        )
       }
     }
 
