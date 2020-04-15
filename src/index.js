@@ -108,31 +108,36 @@ export default class WordCloud extends React.Component {
     // console.log("count",count,"scale",scale,"words", words.length, words.reduce((sum, word) => sum + (word.hasText?1:0), 0))
     // if(words.length < 11) console.log(words.map(d => ({x: d.x, y:d.y})))
     //
-    const yScale = 1 // + (whiteSpace.top + whiteSpace.bottom) / whiteSpace.verticalFilled
+    const xScale = 1 + (whiteSpace.left + whiteSpace.right) / whiteSpace.horizontalFilledSpace
+    const yScale = 1 + (whiteSpace.top + whiteSpace.bottom) / whiteSpace.verticalFilled
+
+    const gScale = 1//Math.min(xScale, yScale)
 
     return (
       <div ref={this.containerRef}>
         <svg width={width} height={height} style={{border: "1px solid black"}}>
-          <g transform={"scale("+yScale+","+yScale+") translate("+(width/2)+","+(height/2)+")"}>
-            {words.map((word,i) =>
-              <text
-                key={i}
+          <g transform={"translate("+(width/2)+","+(height/2)+")"}>
+            <g transform={"scale("+gScale+","+gScale+") translate("+(0)+","+(0)+")"}>
+              {words.map((word,i) =>
+                <text
+                  key={i}
 
-                fontFamily={fontFamily}
-                fontStyle={fontStyle}
-                fontWeight={fontWeight}
-                fontSize={fontScale(word.value)}
-                textAnchor="middle"
-                transform={"translate(" + [word.x, word.y] + ") rotate(" + word.rotate + ")"}
-                fill={fill(i, word)}
+                  fontFamily={fontFamily}
+                  fontStyle={fontStyle}
+                  fontWeight={fontWeight}
+                  fontSize={fontScale(word.value)}
+                  textAnchor="middle"
+                  transform={"translate(" + [word.x, word.y] + ") rotate(" + word.rotate + ")"}
+                  fill={fill(i, word)}
 
-                onClick={e => onClickHandler(e, word, i)}
-                onMouseOver={e => onMouseOverHandler(e, word, i)}
-                onMouseLeave={e => onMouseLeaveHandler(e, word, i)}
-                >
-                {word.key}
-              </text>
-            )}
+                  onClick={e => onClickHandler(e, word, i)}
+                  onMouseOver={e => onMouseOverHandler(e, word, i)}
+                  onMouseLeave={e => onMouseLeaveHandler(e, word, i)}
+                  >
+                  {word.key}
+                </text>
+              )}
+            </g>
           </g>
 
           <line x1={width/2} x2={width/2} y1={height-whiteSpace.bottom} y2={height} strokeWidth="5" stroke="gray"></line>
