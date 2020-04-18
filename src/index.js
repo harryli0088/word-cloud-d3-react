@@ -88,7 +88,7 @@ export default class WordCloud extends React.Component {
     const count = data.reduce((sum, word) => sum + Math.pow(word.key.length, 0.8), 0);
     const scale = width * height / Math.pow(count,0.1) / 3000;
 
-    const fontScale = d3.scaleLinear().domain([0, d3.max(data, d => d.value)]).range([8,2*scale]);
+    const fontScale = d3.scaleLinear().domain([0, d3.max(data, d => d.value)]).range([4,scale]);
     console.log("------------------------")
     const {
       words,
@@ -111,12 +111,15 @@ export default class WordCloud extends React.Component {
     const xScale = 1 + (whiteSpace.left + whiteSpace.right) / whiteSpace.horizontalFilledSpace
     const yScale = 1 + (whiteSpace.top + whiteSpace.bottom) / whiteSpace.verticalFilled
 
-    const gScale = 1//Math.min(xScale, yScale)
+    const xOffset = whiteSpace.right - whiteSpace.left
+    const yOffset = whiteSpace.bottom - whiteSpace.top
+
+    const gScale = Math.min(xScale, yScale)
 
     return (
       <div ref={this.containerRef}>
         <svg width={width} height={height} style={{border: "1px solid black"}}>
-          <g transform={"translate("+(width/2)+","+(height/2)+")"}>
+          <g transform={"translate("+(width/2 + gScale*xOffset/2)+","+(height/2 + gScale*yOffset/2)+")"}>
             <g transform={"scale("+gScale+","+gScale+") translate("+(0)+","+(0)+")"}>
               {words.map((word,i) =>
                 <text
