@@ -54,7 +54,6 @@ export default function cloud() {
 
 
   cloud.compute = function() {
-    //TODO 606 is height pixels...?
     const boardWidth = dimensions[0] >> 5
     const boardHeight = dimensions[1] //606
 

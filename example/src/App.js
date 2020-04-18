@@ -34,6 +34,19 @@ export default class App extends Component {
             />
           </div>
         )}
+
+        {slices.map(slice =>
+          <div key={slice} style={style}>
+            <WordCloud
+              data={data.slice(0,slice).map(d => ({
+                key: d.key + " " + d.key + " " + d.key + " " + d.key,
+                value: d.value,
+              }))}
+              height={500}
+              spiral="rectangular"
+            />
+          </div>
+        )}
       </div>
     )
   }
