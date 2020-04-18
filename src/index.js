@@ -84,8 +84,8 @@ export default class WordCloud extends React.Component {
     const fill = colorFunction || d3.scaleOrdinal().domain(data.map(d => d.value)).range(d3.schemeCategory10)
 
     //TBH I guess and checked my way to get these values...
-    const count = data.reduce((sum, word) => sum + Math.pow(word.value, 0.8), 0) //count the values
-    const maxFontSize = width * height / Math.pow(count,0.1) / 2000 //get the max font size based on the dimensions and the count
+    const count = data.reduce((sum, word) => sum + word.value*word.key.length, 0) //sum the word value times the word length (which correlates roughly with how much space the word will take up)
+    const maxFontSize = width * height / Math.pow(count,0.1) / 1200 //get the max font size based on the dimensions and the count
     const fontScale = d3.scaleLinear().domain([0, d3.max(data, d => d.value)]).range([4,maxFontSize]) //map the data value to the font size
 
     const {
