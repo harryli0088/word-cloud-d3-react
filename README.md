@@ -23,7 +23,6 @@ export default class App extends Component {
       <div>
         <WordCloud
           data={[{"key":"Harry","value":1213},{"key":"Ron","value":410},{"key":"all","value":348},{"key":"Hagrid","value":336}]}
-          width={1000}
           height={500}
 
           spiral="rectangular"
@@ -52,13 +51,12 @@ const data = [
 
 ### Props
 - `data` {Array} Required
-- `width` {Number} Required
 - `height` {Number} Required
 
 Optional props
 - `spiral` {'archimedean' or 'rectangular'} defaults to 'archimedean'
-- `rotate` {Number} defaults to `500`
-- `fontFamily` {String} defaults to `Arial`
+- `rotate` {Number} defaults to `0`
+- `fontFamily` {String} defaults to `Impact`
 - `fontStyle` {String} defaults to `normal`
 - `fontWeight` {String} defaults to `normal`
 - `onClick` {Function} accepts three arguments ```event```, ```word``` and ```index```,

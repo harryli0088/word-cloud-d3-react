@@ -25,8 +25,8 @@ export default class WordCloud extends React.Component {
   static defaultProps = {
     spiral: "archimedean",
     rotate: 0,
-    fontFamily: "Arial",
-    fontStyle: "italics",
+    fontFamily: "Impact",
+    fontStyle: "normal",
     fontWeight: "normal",
     onClickHandler: (e, word, i) => {},
     onMouseOverHandler: (e, word, i) => {},
@@ -38,7 +38,6 @@ export default class WordCloud extends React.Component {
 
     this.state = {
       width: 500,
-      height: 600,
     }
 
     this.containerRef = React.createRef()
@@ -57,7 +56,6 @@ export default class WordCloud extends React.Component {
     if(this.containerRef.current) {
       this.setState({
         width: this.containerRef.current.clientWidth,
-        height: this.containerRef.current.clientHeight,
       })
     }
   }
@@ -65,12 +63,12 @@ export default class WordCloud extends React.Component {
   render() {
     const {
       width,
-      height,
     } = this.state
 
     const {
       data,
 
+      height,
       spiral,
       rotate,
       fontFamily,

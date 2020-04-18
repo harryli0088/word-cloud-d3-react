@@ -10,26 +10,31 @@ export default class App extends Component {
       <div>
         <WordCloud
           data={data.slice(0,10)}
+          height={500}
           spiral="rectangular"
         />
 
         <WordCloud
           data={data.slice(0,50)}
+          height={500}
           spiral="rectangular"
         />
 
         <WordCloud
           data={data.slice(0,100)}
+          height={500}
           spiral="rectangular"
         />
 
         <WordCloud
           data={data.slice(0,200)}
+          height={500}
           spiral="rectangular"
         />
 
         <WordCloud
           data={data.slice(0,400)}
+          height={500}
           spiral="rectangular"
         />
       </div>
