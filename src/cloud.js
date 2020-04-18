@@ -1,7 +1,6 @@
-import * as d3 from 'd3'
-
 // Word cloud layout by Jason Davies, http://www.jasondavies.com/word-cloud/
 // Algorithm due to Jonathan Feinberg, http://static.mrfeinberg.com/bv_ch03.pdf
+// Harry - TBH the source code was garbage or I'm just dumb. I've done my best to clean things up and comment, but I've given up
 export default function cloud() {
   const radiansPerDegree = Math.PI / 180;
   const cw = 2048;
@@ -112,6 +111,7 @@ export default function cloud() {
   }
 
 
+  //Harry - I added these white space calculations so that we can properly scale the word cloud on the React side
   function calculateWhiteSpace(board, boardWidth, boardHeight) {
     const whiteSpace = {
       top: -1, //start at -1 since the nested for loops increment this one extra time
@@ -121,8 +121,6 @@ export default function cloud() {
       horizontalFilledSpace: 0,
       right: -1,
     }
-
-    console.log("DIMENSIONS",boardWidth,boardHeight)
 
     //calculate which rows are empty
     for(let i=0; i<boardHeight; ++i) { //loop through each row going forwards

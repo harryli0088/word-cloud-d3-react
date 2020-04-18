@@ -19,7 +19,7 @@ export default class WordCloud extends React.Component {
     onMouseOverHandler: PropTypes.func,
     onMouseLeaveHandler: PropTypes.func,
 
-    colorFunction: PropTypes.func
+    colorFunction: PropTypes.func,
   }
 
   static defaultProps = {
@@ -38,7 +38,7 @@ export default class WordCloud extends React.Component {
 
     this.state = {
       width: 500,
-      height: 600
+      height: 600,
     }
 
     this.containerRef = React.createRef()
@@ -65,7 +65,7 @@ export default class WordCloud extends React.Component {
   render() {
     const {
       width,
-      height
+      height,
     } = this.state
 
     const {
@@ -83,44 +83,38 @@ export default class WordCloud extends React.Component {
       colorFunction,
     } = this.props
 
-    const fill = colorFunction || d3.scaleOrdinal().domain(data.map(d => d.value)).range(d3.schemeCategory10);
+    const fill = colorFunction || d3.scaleOrdinal().domain(data.map(d => d.value)).range(d3.schemeCategory10)
 
-    const count = data.reduce((sum, word) => sum + Math.pow(word.key.length, 0.8), 0);
-    const scale = width * height / Math.pow(count,0.1) / 3000;
+    //TBH I guess and checked my way to get these values...
+    const count = data.reduce((sum, word) => sum + Math.pow(word.value, 0.8), 0) //count the values
+    const maxFontSize = width * height / Math.pow(count,0.1) / 2000 //get the max font size based on the dimensions and the count
+    const fontScale = d3.scaleLinear().domain([0, d3.max(data, d => d.value)]).range([4,maxFontSize]) //map the data value to the font size
 
-    const fontScale = d3.scaleLinear().domain([0, d3.max(data, d => d.value)]).range([4,scale]);
-    console.log("------------------------")
     const {
       words,
       whiteSpace,
     } = cloud()
     .dimensions([width, height])
-    .words(JSON.parse(JSON.stringify(data)))
-    .fontSize(function(d) { return fontScale(+d.value); })
-    .text(function(d) { return d.key; })
+    .words(JSON.parse(JSON.stringify(data))) //stringify the data so we recompute each time
+    .fontSize(d => fontScale(+d.value))
+    .text(d => d.key)
     .rotate(rotate)
     .font(fontFamily)
     .spiral(spiral)
-    .compute();
+    .compute()
 
-    console.log("whiteSpace", whiteSpace)
-    //
-    // console.log("count",count,"scale",scale,"words", words.length, words.reduce((sum, word) => sum + (word.hasText?1:0), 0))
-    // if(words.length < 11) console.log(words.map(d => ({x: d.x, y:d.y})))
-    //
-    const xScale = 1 + (whiteSpace.left + whiteSpace.right) / whiteSpace.horizontalFilledSpace
-    const yScale = 1 + (whiteSpace.top + whiteSpace.bottom) / whiteSpace.verticalFilled
+    const xOffset = whiteSpace.right - whiteSpace.left //get the offset we need to center the word cloud horizontally
+    const yOffset = whiteSpace.bottom - whiteSpace.top //get the offset we need to center the word cloud vertically
+    const xScale = 1 + (whiteSpace.left + whiteSpace.right) / whiteSpace.horizontalFilledSpace //get the scale we would need to horizontally fill up the white space
+    const yScale = 1 + (whiteSpace.top + whiteSpace.bottom) / whiteSpace.verticalFilled //get the scale we would need to vertically fill up the white space
+    const scale = Math.min(xScale, yScale) //get the minimum of these scales so we don't exceed the boundaries on the axis that has a smaller scaling
 
-    const xOffset = whiteSpace.right - whiteSpace.left
-    const yOffset = whiteSpace.bottom - whiteSpace.top
-
-    const gScale = Math.min(xScale, yScale)
 
     return (
       <div ref={this.containerRef}>
-        <svg width={width} height={height} style={{border: "1px solid black"}}>
-          <g transform={"translate("+(width/2 + gScale*xOffset/2)+","+(height/2 + gScale*yOffset/2)+")"}>
-            <g transform={"scale("+gScale+","+gScale+") translate("+(0)+","+(0)+")"}>
+        <svg width={width} height={height}>
+          <g transform={"translate("+(width + scale*xOffset)/2+","+(height + scale*yOffset)/2+")"}>
+            <g transform={"scale("+scale+","+scale+")"}>
               {words.map((word,i) =>
                 <text
                   key={i}
@@ -143,13 +137,14 @@ export default class WordCloud extends React.Component {
             </g>
           </g>
 
-          <line x1={width/2} x2={width/2} y1={height-whiteSpace.bottom} y2={height} strokeWidth="5" stroke="gray"></line>
+          {/* these lines show on the x and y ais the space filled (pink) and the white space not used (gray) */}
+          {/* <line x1={width/2} x2={width/2} y1={height-whiteSpace.bottom} y2={height} strokeWidth="5" stroke="gray"></line>
           <line x1={width/2} x2={width/2} y1={whiteSpace.top} y2={whiteSpace.top+whiteSpace.verticalFilled} strokeWidth="5" stroke="pink"></line>
           <line x1={width/2} x2={width/2} y1={0} y2={whiteSpace.top} strokeWidth="5" stroke="gray"></line>
 
           <line x1={0} x2={whiteSpace.left} y1={height/2} y2={height/2} strokeWidth="5" stroke="gray"></line>
           <line x1={whiteSpace.left} x2={whiteSpace.left+whiteSpace.horizontalFilledSpace} y1={height/2} y2={height/2} strokeWidth="5" stroke="pink"></line>
-          <line x1={width-whiteSpace.right} x2={width} y1={height/2} y2={height/2} strokeWidth="5" stroke="gray"></line>
+          <line x1={width-whiteSpace.right} x2={width} y1={height/2} y2={height/2} strokeWidth="5" stroke="gray"></line> */}
         </svg>
       </div>
     )
