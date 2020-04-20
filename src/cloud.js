@@ -55,10 +55,11 @@ export default function cloud() {
 
   cloud.compute = function() {
     const boardWidth = dimensions[0] >> 5
-    const boardHeight = dimensions[1] //606
+    const boardHeight = dimensions[1]
 
     ctx.clearRect(0,0,canvas.width,canvas.height) //clear the canvas on which we will make calculations
-    let board = zeroArray(boardWidth *boardHeight);
+    console.log("boardWidth",boardWidth,dimensions[0],"boardHeight",boardHeight,dimensions[1])
+    let board = zeroArray(boardWidth * boardHeight);
     let bounds = null;
     let data = words.map(function(d, i) { //initialize some fields for each word
       d.text = text.call(this, d, i);
@@ -517,6 +518,7 @@ export default function cloud() {
   }
 
   function zeroArray(length) {
+    console.log("length",length)
     return new Array(length).fill(0);
   }
 

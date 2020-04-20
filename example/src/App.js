@@ -6,7 +6,7 @@ const data = [{"key":"Harry","value":1213},{"key":"Ron","value":410},{"key":"all
 
 const style = {border:"1px solid black"}
 
-const slices = [10, 50, 100, 200, 400]
+const slices = [10, 100, 400]
 
 export default class App extends Component {
   render () {
@@ -22,7 +22,7 @@ export default class App extends Component {
           </div>
         )}
 
-        {slices.map(slice =>
+        {/* {slices.map(slice =>
           <div key={slice} style={style}>
             <WordCloud
               data={data.slice(0,slice).map(d => ({
@@ -46,8 +46,1251 @@ export default class App extends Component {
               spiral="rectangular"
             />
           </div>
+        )} */}
+
+        {/* {[10, 20, 50, 100].map(slice =>
+          <div key={slice} style={style}>
+            <WordCloud
+              data={gram3.slice(0,slice)}
+              height={500}
+              spiral="rectangular"
+            />
+          </div>
+        )} */}
+
+        {[10, 50, 100].map(slice =>
+          <div key={slice} style={style}>
+            <WordCloud
+              data={gram4.slice(0,slice)}
+              height={500}
+              spiral="rectangular"
+            />
+          </div>
         )}
+
+        {/* {[10, 20, 50, 100].map(slice =>
+          <div key={slice} style={style}>
+            <WordCloud
+              data={gram5.slice(0,slice)}
+              height={500}
+              spiral="rectangular"
+            />
+          </div>
+        )} */}
       </div>
     )
   }
 }
+
+
+
+
+const gram3 = [
+    {
+      "key": "issue related tax",
+      "value": 30
+    },
+    {
+      "key": "related tax technology",
+      "value": 30
+    },
+    {
+      "key": "tax technology broadband",
+      "value": 30
+    },
+    {
+      "key": "issue related mobile",
+      "value": 20
+    },
+    {
+      "key": "issue issue related",
+      "value": 19
+    },
+    {
+      "key": "corporate tax reform",
+      "value": 19
+    },
+    {
+      "key": "international trade commission",
+      "value": 18
+    },
+    {
+      "key": "trade commission patent",
+      "value": 18
+    },
+    {
+      "key": "commission patent issue",
+      "value": 18
+    },
+    {
+      "key": "tax reform international",
+      "value": 18
+    },
+    {
+      "key": "reform international tax",
+      "value": 18
+    },
+    {
+      "key": "economic development need",
+      "value": 16
+    },
+    {
+      "key": "issue related competition",
+      "value": 14
+    },
+    {
+      "key": "privacy cybersecurity encryption",
+      "value": 14
+    },
+    {
+      "key": "foreign regulatory action",
+      "value": 12
+    },
+    {
+      "key": "issue related student",
+      "value": 11
+    },
+    {
+      "key": "patent litigation reform",
+      "value": 11
+    },
+    {
+      "key": "tax cut job",
+      "value": 11
+    },
+    {
+      "key": "cut job act",
+      "value": 11
+    },
+    {
+      "key": "international tax reform",
+      "value": 11
+    },
+    {
+      "key": "general consumer privacy",
+      "value": 10
+    },
+    {
+      "key": "consumer privacy issue",
+      "value": 10
+    },
+    {
+      "key": "battery transportation safety",
+      "value": 10
+    },
+    {
+      "key": "transportation safety issue",
+      "value": 10
+    },
+    {
+      "key": "issue related government",
+      "value": 10
+    },
+    {
+      "key": "related government request",
+      "value": 10
+    },
+    {
+      "key": "government request data",
+      "value": 10
+    },
+    {
+      "key": "accessibility issue related",
+      "value": 10
+    },
+    {
+      "key": "issue related distribution",
+      "value": 10
+    },
+    {
+      "key": "related distribution video",
+      "value": 10
+    },
+    {
+      "key": "distribution video programming",
+      "value": 10
+    },
+    {
+      "key": "general education technology",
+      "value": 10
+    },
+    {
+      "key": "education technology funding",
+      "value": 10
+    },
+    {
+      "key": "technology funding issue",
+      "value": 10
+    },
+    {
+      "key": "funding issue related",
+      "value": 10
+    },
+    {
+      "key": "related student privacy",
+      "value": 10
+    },
+    {
+      "key": "general patent reform",
+      "value": 10
+    },
+    {
+      "key": "reform issue related",
+      "value": 10
+    },
+    {
+      "key": "general copyright issue",
+      "value": 10
+    },
+    {
+      "key": "related mobile payment",
+      "value": 10
+    },
+    {
+      "key": "related mobile device",
+      "value": 10
+    },
+    {
+      "key": "mobile device health",
+      "value": 10
+    },
+    {
+      "key": "issue related regulation",
+      "value": 10
+    },
+    {
+      "key": "related regulation mobile",
+      "value": 10
+    },
+    {
+      "key": "regulation mobile medical",
+      "value": 10
+    },
+    {
+      "key": "mobile medical application",
+      "value": 10
+    },
+    {
+      "key": "medical application issue",
+      "value": 10
+    },
+    {
+      "key": "application issue related",
+      "value": 10
+    },
+    {
+      "key": "issue related privacy",
+      "value": 10
+    },
+    {
+      "key": "related privacy health",
+      "value": 10
+    },
+    {
+      "key": "privacy health data",
+      "value": 10
+    },
+    {
+      "key": "issue related diversity",
+      "value": 10
+    },
+    {
+      "key": "related diversity workplace",
+      "value": 10
+    },
+    {
+      "key": "diversity workplace issue",
+      "value": 10
+    },
+    {
+      "key": "workplace issue related",
+      "value": 10
+    },
+    {
+      "key": "international tax issue",
+      "value": 10
+    },
+    {
+      "key": "issue related foreign",
+      "value": 10
+    },
+    {
+      "key": "related foreign regulatory",
+      "value": 10
+    },
+    {
+      "key": "standard technical barrier",
+      "value": 10
+    },
+    {
+      "key": "technical barrier trade",
+      "value": 10
+    },
+    {
+      "key": "barrier trade market",
+      "value": 10
+    },
+    {
+      "key": "trade market access",
+      "value": 10
+    },
+    {
+      "key": "market access including",
+      "value": 10
+    },
+    {
+      "key": "access including tariff",
+      "value": 10
+    },
+    {
+      "key": "including tariff nontariff",
+      "value": 10
+    },
+    {
+      "key": "tariff nontariff barrier",
+      "value": 10
+    },
+    {
+      "key": "nontariff barrier issue",
+      "value": 10
+    },
+    {
+      "key": "barrier issue related",
+      "value": 10
+    },
+    {
+      "key": "issue related custom",
+      "value": 10
+    },
+    {
+      "key": "related custom border",
+      "value": 10
+    },
+    {
+      "key": "custom border protection",
+      "value": 10
+    },
+    {
+      "key": "export control regulation",
+      "value": 10
+    },
+    {
+      "key": "matter dealing international",
+      "value": 10
+    },
+    {
+      "key": "dealing international taxation",
+      "value": 10
+    },
+    {
+      "key": "issue related music",
+      "value": 9
+    },
+    {
+      "key": "related music licensing",
+      "value": 9
+    },
+    {
+      "key": "international trade issue",
+      "value": 9
+    },
+    {
+      "key": "technology issue research",
+      "value": 9
+    },
+    {
+      "key": "issue research technology",
+      "value": 9
+    },
+    {
+      "key": "research technology innovation",
+      "value": 9
+    },
+    {
+      "key": "online privacy education",
+      "value": 9
+    },
+    {
+      "key": "privacy education privacy",
+      "value": 9
+    },
+    {
+      "key": "education privacy cybersecurity",
+      "value": 9
+    },
+    {
+      "key": "patent issue patent",
+      "value": 9
+    },
+    {
+      "key": "issue patent litigation",
+      "value": 9
+    },
+    {
+      "key": "technology innovation education",
+      "value": 9
+    },
+    {
+      "key": "tax reform issue",
+      "value": 9
+    },
+    {
+      "key": "copyright issue issue",
+      "value": 8
+    },
+    {
+      "key": "issue related autonomous",
+      "value": 8
+    },
+    {
+      "key": "related autonomous vehicle",
+      "value": 8
+    },
+    {
+      "key": "innovation education student",
+      "value": 8
+    },
+    {
+      "key": "education student privacy",
+      "value": 8
+    },
+    {
+      "key": "opioid abuse prevention",
+      "value": 8
+    },
+    {
+      "key": "safety issue issue",
+      "value": 7
+    },
+    {
+      "key": "issue related consumer",
+      "value": 7
+    },
+    {
+      "key": "related consumer fraud",
+      "value": 7
+    },
+    {
+      "key": "related competition mobile",
+      "value": 7
+    },
+    {
+      "key": "competition mobile technology",
+      "value": 7
+    },
+    {
+      "key": "mobile technology industry",
+      "value": 7
+    },
+    {
+      "key": "issue related workforce",
+      "value": 7
+    }
+  ]
+  const gram4 = [
+    {
+      "key": "issue related tax technology",
+      "value": 30
+    },
+    {
+      "key": "related tax technology broadband",
+      "value": 30
+    },
+    {
+      "key": "international trade commission patent",
+      "value": 18
+    },
+    {
+      "key": "trade commission patent issue",
+      "value": 18
+    },
+    {
+      "key": "corporate tax reform international",
+      "value": 18
+    },
+    {
+      "key": "tax reform international tax",
+      "value": 18
+    },
+    {
+      "key": "tax cut job act",
+      "value": 11
+    },
+    {
+      "key": "general consumer privacy issue",
+      "value": 10
+    },
+    {
+      "key": "battery transportation safety issue",
+      "value": 10
+    },
+    {
+      "key": "issue related government request",
+      "value": 10
+    },
+    {
+      "key": "related government request data",
+      "value": 10
+    },
+    {
+      "key": "accessibility issue related distribution",
+      "value": 10
+    },
+    {
+      "key": "issue related distribution video",
+      "value": 10
+    },
+    {
+      "key": "related distribution video programming",
+      "value": 10
+    },
+    {
+      "key": "general education technology funding",
+      "value": 10
+    },
+    {
+      "key": "education technology funding issue",
+      "value": 10
+    },
+    {
+      "key": "technology funding issue related",
+      "value": 10
+    },
+    {
+      "key": "issue related student privacy",
+      "value": 10
+    },
+    {
+      "key": "issue related mobile payment",
+      "value": 10
+    },
+    {
+      "key": "issue related mobile device",
+      "value": 10
+    },
+    {
+      "key": "related mobile device health",
+      "value": 10
+    },
+    {
+      "key": "issue related regulation mobile",
+      "value": 10
+    },
+    {
+      "key": "related regulation mobile medical",
+      "value": 10
+    },
+    {
+      "key": "regulation mobile medical application",
+      "value": 10
+    },
+    {
+      "key": "mobile medical application issue",
+      "value": 10
+    },
+    {
+      "key": "medical application issue related",
+      "value": 10
+    },
+    {
+      "key": "application issue related privacy",
+      "value": 10
+    },
+    {
+      "key": "issue related privacy health",
+      "value": 10
+    },
+    {
+      "key": "related privacy health data",
+      "value": 10
+    },
+    {
+      "key": "issue related diversity workplace",
+      "value": 10
+    },
+    {
+      "key": "related diversity workplace issue",
+      "value": 10
+    },
+    {
+      "key": "diversity workplace issue related",
+      "value": 10
+    },
+    {
+      "key": "workplace issue related competition",
+      "value": 10
+    },
+    {
+      "key": "issue related foreign regulatory",
+      "value": 10
+    },
+    {
+      "key": "related foreign regulatory action",
+      "value": 10
+    },
+    {
+      "key": "standard technical barrier trade",
+      "value": 10
+    },
+    {
+      "key": "technical barrier trade market",
+      "value": 10
+    },
+    {
+      "key": "barrier trade market access",
+      "value": 10
+    },
+    {
+      "key": "trade market access including",
+      "value": 10
+    },
+    {
+      "key": "market access including tariff",
+      "value": 10
+    },
+    {
+      "key": "access including tariff nontariff",
+      "value": 10
+    },
+    {
+      "key": "including tariff nontariff barrier",
+      "value": 10
+    },
+    {
+      "key": "tariff nontariff barrier issue",
+      "value": 10
+    },
+    {
+      "key": "nontariff barrier issue related",
+      "value": 10
+    },
+    {
+      "key": "barrier issue related custom",
+      "value": 10
+    },
+    {
+      "key": "issue related custom border",
+      "value": 10
+    },
+    {
+      "key": "related custom border protection",
+      "value": 10
+    },
+    {
+      "key": "matter dealing international taxation",
+      "value": 10
+    },
+    {
+      "key": "issue related music licensing",
+      "value": 9
+    },
+    {
+      "key": "technology issue research technology",
+      "value": 9
+    },
+    {
+      "key": "issue research technology innovation",
+      "value": 9
+    },
+    {
+      "key": "online privacy education privacy",
+      "value": 9
+    },
+    {
+      "key": "privacy education privacy cybersecurity",
+      "value": 9
+    },
+    {
+      "key": "commission patent issue patent",
+      "value": 9
+    },
+    {
+      "key": "patent issue patent litigation",
+      "value": 9
+    },
+    {
+      "key": "issue patent litigation reform",
+      "value": 9
+    },
+    {
+      "key": "reform international tax issue",
+      "value": 9
+    },
+    {
+      "key": "reform international tax reform",
+      "value": 9
+    },
+    {
+      "key": "international tax reform issue",
+      "value": 9
+    },
+    {
+      "key": "tax reform issue related",
+      "value": 9
+    },
+    {
+      "key": "reform issue related foreign",
+      "value": 9
+    },
+    {
+      "key": "general copyright issue issue",
+      "value": 8
+    },
+    {
+      "key": "copyright issue issue related",
+      "value": 8
+    },
+    {
+      "key": "issue issue related music",
+      "value": 8
+    },
+    {
+      "key": "issue related autonomous vehicle",
+      "value": 8
+    },
+    {
+      "key": "technology innovation education student",
+      "value": 8
+    },
+    {
+      "key": "innovation education student privacy",
+      "value": 8
+    },
+    {
+      "key": "transportation safety issue issue",
+      "value": 7
+    },
+    {
+      "key": "safety issue issue related",
+      "value": 7
+    },
+    {
+      "key": "issue related consumer fraud",
+      "value": 7
+    },
+    {
+      "key": "issue related competition mobile",
+      "value": 7
+    },
+    {
+      "key": "related competition mobile technology",
+      "value": 7
+    },
+    {
+      "key": "competition mobile technology industry",
+      "value": 7
+    },
+    {
+      "key": "issue related financial technology",
+      "value": 7
+    },
+    {
+      "key": "related financial technology mobile",
+      "value": 7
+    },
+    {
+      "key": "financial technology mobile payment",
+      "value": 7
+    },
+    {
+      "key": "international trade issue international",
+      "value": 7
+    },
+    {
+      "key": "trade issue international trade",
+      "value": 7
+    },
+    {
+      "key": "issue international trade commission",
+      "value": 7
+    },
+    {
+      "key": "health technology issue research",
+      "value": 7
+    },
+    {
+      "key": "research technology innovation regulation",
+      "value": 7
+    },
+    {
+      "key": "technology innovation regulation mobile",
+      "value": 7
+    },
+    {
+      "key": "innovation regulation mobile health",
+      "value": 7
+    },
+    {
+      "key": "regulation mobile health application",
+      "value": 7
+    },
+    {
+      "key": "mobile health application health",
+      "value": 7
+    },
+    {
+      "key": "health application health privacy",
+      "value": 7
+    },
+    {
+      "key": "education privacy cybersecurity encryption",
+      "value": 7
+    },
+    {
+      "key": "privacy cybersecurity encryption financial",
+      "value": 7
+    },
+    {
+      "key": "cybersecurity encryption financial technology",
+      "value": 7
+    },
+    {
+      "key": "patent litigation reform copyright",
+      "value": 7
+    },
+    {
+      "key": "litigation reform copyright issue",
+      "value": 7
+    },
+    {
+      "key": "reform copyright issue music",
+      "value": 7
+    },
+    {
+      "key": "copyright issue music licensing",
+      "value": 7
+    },
+    {
+      "key": "economic development need opioid",
+      "value": 7
+    },
+    {
+      "key": "development need opioid abuse",
+      "value": 7
+    },
+    {
+      "key": "need opioid abuse prevention",
+      "value": 7
+    },
+    {
+      "key": "h2a agricultural guestworker reform",
+      "value": 7
+    },
+    {
+      "key": "everify border interior enforcement",
+      "value": 7
+    },
+    {
+      "key": "specialty crop farm bill",
+      "value": 7
+    },
+    {
+      "key": "crop farm bill program",
+      "value": 7
+    }
+  ]
+  const gram5 = [
+    {
+      "key": "issue related tax technology broadband",
+      "value": 30
+    },
+    {
+      "key": "international trade commission patent issue",
+      "value": 18
+    },
+    {
+      "key": "corporate tax reform international tax",
+      "value": 18
+    },
+    {
+      "key": "issue related government request data",
+      "value": 10
+    },
+    {
+      "key": "accessibility issue related distribution video",
+      "value": 10
+    },
+    {
+      "key": "issue related distribution video programming",
+      "value": 10
+    },
+    {
+      "key": "general education technology funding issue",
+      "value": 10
+    },
+    {
+      "key": "education technology funding issue related",
+      "value": 10
+    },
+    {
+      "key": "issue related mobile device health",
+      "value": 10
+    },
+    {
+      "key": "issue related regulation mobile medical",
+      "value": 10
+    },
+    {
+      "key": "related regulation mobile medical application",
+      "value": 10
+    },
+    {
+      "key": "regulation mobile medical application issue",
+      "value": 10
+    },
+    {
+      "key": "mobile medical application issue related",
+      "value": 10
+    },
+    {
+      "key": "medical application issue related privacy",
+      "value": 10
+    },
+    {
+      "key": "application issue related privacy health",
+      "value": 10
+    },
+    {
+      "key": "issue related privacy health data",
+      "value": 10
+    },
+    {
+      "key": "issue related diversity workplace issue",
+      "value": 10
+    },
+    {
+      "key": "related diversity workplace issue related",
+      "value": 10
+    },
+    {
+      "key": "diversity workplace issue related competition",
+      "value": 10
+    },
+    {
+      "key": "issue related foreign regulatory action",
+      "value": 10
+    },
+    {
+      "key": "standard technical barrier trade market",
+      "value": 10
+    },
+    {
+      "key": "technical barrier trade market access",
+      "value": 10
+    },
+    {
+      "key": "barrier trade market access including",
+      "value": 10
+    },
+    {
+      "key": "trade market access including tariff",
+      "value": 10
+    },
+    {
+      "key": "market access including tariff nontariff",
+      "value": 10
+    },
+    {
+      "key": "access including tariff nontariff barrier",
+      "value": 10
+    },
+    {
+      "key": "including tariff nontariff barrier issue",
+      "value": 10
+    },
+    {
+      "key": "tariff nontariff barrier issue related",
+      "value": 10
+    },
+    {
+      "key": "nontariff barrier issue related custom",
+      "value": 10
+    },
+    {
+      "key": "barrier issue related custom border",
+      "value": 10
+    },
+    {
+      "key": "issue related custom border protection",
+      "value": 10
+    },
+    {
+      "key": "technology issue research technology innovation",
+      "value": 9
+    },
+    {
+      "key": "online privacy education privacy cybersecurity",
+      "value": 9
+    },
+    {
+      "key": "trade commission patent issue patent",
+      "value": 9
+    },
+    {
+      "key": "commission patent issue patent litigation",
+      "value": 9
+    },
+    {
+      "key": "patent issue patent litigation reform",
+      "value": 9
+    },
+    {
+      "key": "tax reform international tax issue",
+      "value": 9
+    },
+    {
+      "key": "tax reform international tax reform",
+      "value": 9
+    },
+    {
+      "key": "reform international tax reform issue",
+      "value": 9
+    },
+    {
+      "key": "international tax reform issue related",
+      "value": 9
+    },
+    {
+      "key": "tax reform issue related foreign",
+      "value": 9
+    },
+    {
+      "key": "reform issue related foreign regulatory",
+      "value": 9
+    },
+    {
+      "key": "general copyright issue issue related",
+      "value": 8
+    },
+    {
+      "key": "copyright issue issue related music",
+      "value": 8
+    },
+    {
+      "key": "issue issue related music licensing",
+      "value": 8
+    },
+    {
+      "key": "technology innovation education student privacy",
+      "value": 8
+    },
+    {
+      "key": "battery transportation safety issue issue",
+      "value": 7
+    },
+    {
+      "key": "transportation safety issue issue related",
+      "value": 7
+    },
+    {
+      "key": "issue related competition mobile technology",
+      "value": 7
+    },
+    {
+      "key": "related competition mobile technology industry",
+      "value": 7
+    },
+    {
+      "key": "issue related financial technology mobile",
+      "value": 7
+    },
+    {
+      "key": "related financial technology mobile payment",
+      "value": 7
+    },
+    {
+      "key": "international trade issue international trade",
+      "value": 7
+    },
+    {
+      "key": "trade issue international trade commission",
+      "value": 7
+    },
+    {
+      "key": "issue international trade commission patent",
+      "value": 7
+    },
+    {
+      "key": "health technology issue research technology",
+      "value": 7
+    },
+    {
+      "key": "issue research technology innovation regulation",
+      "value": 7
+    },
+    {
+      "key": "research technology innovation regulation mobile",
+      "value": 7
+    },
+    {
+      "key": "technology innovation regulation mobile health",
+      "value": 7
+    },
+    {
+      "key": "innovation regulation mobile health application",
+      "value": 7
+    },
+    {
+      "key": "regulation mobile health application health",
+      "value": 7
+    },
+    {
+      "key": "mobile health application health privacy",
+      "value": 7
+    },
+    {
+      "key": "privacy education privacy cybersecurity encryption",
+      "value": 7
+    },
+    {
+      "key": "education privacy cybersecurity encryption financial",
+      "value": 7
+    },
+    {
+      "key": "privacy cybersecurity encryption financial technology",
+      "value": 7
+    },
+    {
+      "key": "issue patent litigation reform copyright",
+      "value": 7
+    },
+    {
+      "key": "patent litigation reform copyright issue",
+      "value": 7
+    },
+    {
+      "key": "litigation reform copyright issue music",
+      "value": 7
+    },
+    {
+      "key": "reform copyright issue music licensing",
+      "value": 7
+    },
+    {
+      "key": "economic development need opioid abuse",
+      "value": 7
+    },
+    {
+      "key": "development need opioid abuse prevention",
+      "value": 7
+    },
+    {
+      "key": "specialty crop farm bill program",
+      "value": 7
+    },
+    {
+      "key": "crop farm bill program market",
+      "value": 7
+    },
+    {
+      "key": "farm bill program market access",
+      "value": 7
+    },
+    {
+      "key": "bill program market access program",
+      "value": 7
+    },
+    {
+      "key": "general patent reform general copyright",
+      "value": 7
+    },
+    {
+      "key": "patent reform general copyright issue",
+      "value": 7
+    },
+    {
+      "key": "reform general copyright issue issue",
+      "value": 7
+    },
+    {
+      "key": "workplace issue related competition online",
+      "value": 7
+    },
+    {
+      "key": "issue related competition online digital",
+      "value": 7
+    },
+    {
+      "key": "related competition online digital service",
+      "value": 7
+    },
+    {
+      "key": "related mobile device health issue",
+      "value": 7
+    },
+    {
+      "key": "mobile device health issue related",
+      "value": 7
+    },
+    {
+      "key": "device health issue related regulation",
+      "value": 7
+    },
+    {
+      "key": "health issue related regulation mobile",
+      "value": 7
+    },
+    {
+      "key": "matter dealing international taxation tax",
+      "value": 7
+    },
+    {
+      "key": "dealing international taxation tax reform",
+      "value": 7
+    },
+    {
+      "key": "international taxation tax reform hr",
+      "value": 7
+    },
+    {
+      "key": "congress tax reform act senate",
+      "value": 7
+    },
+    {
+      "key": "tax reform act senate finance",
+      "value": 7
+    },
+    {
+      "key": "reform act senate finance committee",
+      "value": 7
+    },
+    {
+      "key": "act senate finance committee tax",
+      "value": 7
+    },
+    {
+      "key": "senate finance committee tax reform",
+      "value": 7
+    },
+    {
+      "key": "finance committee tax reform process",
+      "value": 7
+    },
+    {
+      "key": "house republican tax reform plan",
+      "value": 7
+    },
+    {
+      "key": "safety issue issue related consumer",
+      "value": 6
+    },
+    {
+      "key": "issue issue related consumer fraud",
+      "value": 6
+    },
+    {
+      "key": "issue related immigration including highskilled",
+      "value": 6
+    },
+    {
+      "key": "related immigration including highskilled immigration",
+      "value": 6
+    },
+    {
+      "key": "related distribution video programming issue",
+      "value": 6
+    }
+  ]
+
+
+console.log("gram3",gram3.length,"gram4",gram4.length,"gram5",gram5.length)

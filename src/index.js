@@ -10,6 +10,7 @@ export default class WordCloud extends React.Component {
   static propTypes = {
     data: PropTypes.array.isRequired,
 
+    // virtualWidth: PropTypes.number,
     spiral: PropTypes.oneOf(['archimedean', 'rectangular']),
     rotate: PropTypes.number,
     fontFamily: PropTypes.string,
@@ -23,6 +24,7 @@ export default class WordCloud extends React.Component {
   }
 
   static defaultProps = {
+    // virtualWidth: 5000,
     spiral: "archimedean",
     rotate: 0,
     fontFamily: "Impact",
@@ -84,8 +86,8 @@ export default class WordCloud extends React.Component {
     const fill = colorFunction || d3.scaleOrdinal().domain(data.map(d => d.value)).range(d3.schemeCategory10)
 
     //TBH I guess and checked my way to get these values...
-    const count = data.reduce((sum, word) => sum + word.value*word.key.length, 0) //sum the word value times the word length (which correlates roughly with how much space the word will take up)
-    const maxFontSize = width * height / Math.pow(count,0.4) / 75 //get the max font size based on the dimensions and the count
+    const count = data.reduce((sum, word) => sum + word.value*Math.pow(word.key.length,2.5), 0) //sum the word value times the word length (which correlates roughly with how much space the word will take up)
+    const maxFontSize = (Math.min(width,height) / Math.max(width, height)) * width * height / Math.pow(count,0.6) //get the max font size based on the dimensions and the count
     const fontScale = d3.scaleLinear().domain([0, d3.max(data, d => d.value)]).range([4,maxFontSize]) //map the data value to the font size
 
     const {
