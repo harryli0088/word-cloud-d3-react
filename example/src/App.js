@@ -6,7 +6,7 @@ const data = [{"key":"Harry","value":1213},{"key":"Ron","value":410},{"key":"all
 
 const style = {border:"1px solid black"}
 
-const slices = [10, 100, 400]
+const slices = [10, 50, 100, 400]
 
 export default class App extends Component {
   render () {
@@ -22,7 +22,7 @@ export default class App extends Component {
           </div>
         )}
 
-        {/* {slices.map(slice =>
+        {slices.map(slice =>
           <div key={slice} style={style}>
             <WordCloud
               data={data.slice(0,slice).map(d => ({
@@ -35,7 +35,7 @@ export default class App extends Component {
           </div>
         )}
 
-        {slices.map(slice =>
+        {/* {slices.map(slice =>
           <div key={slice} style={style}>
             <WordCloud
               data={data.slice(0,slice).map(d => ({

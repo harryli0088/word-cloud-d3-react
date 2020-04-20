@@ -86,15 +86,15 @@ export default class WordCloud extends React.Component {
     const fill = colorFunction || d3.scaleOrdinal().domain(data.map(d => d.value)).range(d3.schemeCategory10)
 
     //TBH I guess and checked my way to get these values...
-    const count = data.reduce((sum, word) => sum + word.value*Math.pow(word.key.length,2.5), 0) //sum the word value times the word length (which correlates roughly with how much space the word will take up)
-    const maxFontSize = (Math.min(width,height) / Math.max(width, height)) * width * height / Math.pow(count,0.6) //get the max font size based on the dimensions and the count
+    const count = data.reduce((sum, word) => sum + word.value*Math.pow(word.key.length,3.5), 0) //sum the word value times the word length (which correlates roughly with how much space the word will take up)
+    const maxFontSize = (Math.min(width,height) / Math.max(width, height)) * width * height / Math.pow(count,0.4) / 2 //get the max font size based on the dimensions and the count
     const fontScale = d3.scaleLinear().domain([0, d3.max(data, d => d.value)]).range([4,maxFontSize]) //map the data value to the font size
 
     const {
       words,
       whiteSpace,
     } = cloud()
-    .dimensions([width, height])
+    .dimensions([2*width, 2*height])
     .words(JSON.parse(JSON.stringify(data))) //stringify the data so we recompute each time
     .fontSize(d => fontScale(+d.value))
     .text(d => d.key)
@@ -107,7 +107,7 @@ export default class WordCloud extends React.Component {
     const yOffset = whiteSpace.bottom - whiteSpace.top //get the offset we need to center the word cloud vertically
     const xScale = 1 + (whiteSpace.left + whiteSpace.right) / whiteSpace.horizontalFilledSpace //get the scale we would need to horizontally fill up the white space
     const yScale = 1 + (whiteSpace.top + whiteSpace.bottom) / whiteSpace.verticalFilled //get the scale we would need to vertically fill up the white space
-    const scale = Math.min(xScale, yScale) //get the minimum of these scales so we don't exceed the boundaries on the axis that has a smaller scaling
+    const scale = Math.min(xScale, yScale) / 2 //get the minimum of these scales so we don't exceed the boundaries on the axis that has a smaller scaling
 
 
     return (
