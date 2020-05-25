@@ -6,6 +6,8 @@ import * as d3 from 'd3'
 import styles from './styles.css'
 import cloud from "./cloud"
 
+const SCALE = 2
+
 export default class WordCloud extends React.Component {
   static propTypes = {
     data: PropTypes.array.isRequired,
@@ -94,7 +96,7 @@ export default class WordCloud extends React.Component {
       words,
       whiteSpace,
     } = cloud()
-    .dimensions([2*width, 2*height])
+    .dimensions([SCALE*width, SCALE*height])
     .words(JSON.parse(JSON.stringify(data))) //stringify the data so we recompute each time
     .fontSize(d => fontScale(+d.value))
     .text(d => d.key)
@@ -107,7 +109,7 @@ export default class WordCloud extends React.Component {
     const yOffset = whiteSpace.bottom - whiteSpace.top //get the offset we need to center the word cloud vertically
     const xScale = 1 + (whiteSpace.left + whiteSpace.right) / whiteSpace.horizontalFilledSpace //get the scale we would need to horizontally fill up the white space
     const yScale = 1 + (whiteSpace.top + whiteSpace.bottom) / whiteSpace.verticalFilled //get the scale we would need to vertically fill up the white space
-    const scale = Math.min(xScale, yScale) / 2 //get the minimum of these scales so we don't exceed the boundaries on the axis that has a smaller scaling
+    const scale = Math.min(xScale, yScale) / SCALE //get the minimum of these scales so we don't exceed the boundaries on the axis that has a smaller scaling
 
 
     return (

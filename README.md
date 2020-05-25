@@ -1,6 +1,6 @@
 # word-cloud-d3-react
 
-> responsive word cloud using d3 and react
+> responsive word cloud using d3 and react that dynamically fills up padding white space
 
 ![Demo](/example/word-cloud-d3-react.gif)
 
@@ -63,6 +63,13 @@ Optional props
 - `onMouseOver` {Function} accepts three arguments ```event```, ```word``` and ```index```,
 - `onMouseLeave` {Function} accepts three arguments ```event```, ```word``` and ```index```,
 - `colorFunction` {Function} accepts two arguments ```index``` and ```word```, defaults to ```d3.schemeCategory10```
+
+
+
+## Cloud modifications
+
+I tried to clean up the ```cloud.js``` file as much as I could, but I can't make much sense of it. Something I added at the end of the calculations is a function to calculate the white space leftover in the board. In React, I scale the words based on the unused white space, that way the word cloud dynamically fills up the whole space.
+
 
 
 ## Acknowledgements

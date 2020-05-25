@@ -76,8 +76,8 @@ export default function cloud() {
         let d = data[i]; //get the data at this index
 
         //randomly place this word within the dimensions between 25% to 75%
-        d.x = (dimensions[0] * (Math.random() + .5)) >> 1;
-        d.y = (dimensions[1] * (Math.random() + .5)) >> 1;
+        d.x = (dimensions[0] * (0.5*Math.random() + .75)) >> 1;
+        d.y = (dimensions[1] * (0.5*Math.random() + .75)) >> 1;
 
         cloudSprite(d, data, i);
 
@@ -194,7 +194,7 @@ export default function cloud() {
     const startX = tag.x; //starting x position of the tag
     const startY = tag.y; //starting x position of the tag
     const dt = Math.random() < .5 ? 1 : -1; //randomly pick 1 or -1
-    let t = -dt; //randomly set to opposite of dt (-1 or 1)
+    let t = -dt; //set to opposite of dt (-1 or 1)
     let dxdy; //used to get the return value of the spiral function in the form [dx, dy]
     let dx; //used to get the x value of the spiral function
     let dy; //used to get the y value of the spiral function
@@ -337,8 +337,8 @@ export default function cloud() {
       d = data[dataIndex]; //get the next word
       ctx.save(); //save the current canvas state
       ctx.font = d.style + " " + d.weight + " " + ~~(d.size + 1) + "px " + d.font; //set the font for this word
-      let w = ctx.measureText(d.text + "m").width;
-      let h = d.size << 1;
+      let w = ctx.measureText(d.text + "m").width; //measure the width of the text
+      let h = d.size << 1; //left shift one digit, effectively multiply by 2
 
       if (d.rotate) { //if we should be rotating this word
         const sr = Math.sin(d.rotate * radiansPerDegree);
@@ -369,8 +369,8 @@ export default function cloud() {
       }
 
       ctx.translate(x + (w >> 1), y + (h >> 1)); //translate the canvas so that the origin is about the center of the word
-      if (d.rotate) {
-        ctx.rotate(d.rotate * radiansPerDegree);
+      if (d.rotate) { //if we are rotating
+        ctx.rotate(d.rotate * radiansPerDegree); //rotate the canvas context
       }
       ctx.fillText(d.text, 0, 0); //place the text on the canvas
       if (d.padding) { //if there is padding between the works
@@ -393,7 +393,7 @@ export default function cloud() {
 
     let pixels = ctx.getImageData(0, 0, cw, ch).data; //get the image data on the canvas
     let sprite = [];
-    while (--dataIndex >= 0) { //move backwards through the daa points
+    while (--dataIndex >= 0) { //move backwards through the data points
       d = data[dataIndex]; //get this data point
 
       if (!d.hasText) { //if this data point does not have text
@@ -419,8 +419,8 @@ export default function cloud() {
         for (let i = 0; i < w; i++) { //loop throguh each pixel row in the word
           const k = w32 * j + (i >> 5),
           m = pixels[((y + j) * (cw) + (x + i)) << 2] ? 1 << (31 - (i % 32)) : 0;
-          sprite[k] |= m; //sprite[k] = sprite[k] | m
-          seen |= m; //seen = seen | m
+          sprite[k] |= m; //bitwise or assignment, sprite[k] = sprite[k] | m
+          seen |= m; //bitwise or assignment, seen = seen | m
         }
         if (seen) {
           seenRow = j;
